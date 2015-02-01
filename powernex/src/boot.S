@@ -28,7 +28,7 @@ start:
   cli
 
   mov $stack + STACK_SIZE, %esp
-  mov %esp, %ebp
+	mov $0, %ebp
 
   push %ebx
   push %eax

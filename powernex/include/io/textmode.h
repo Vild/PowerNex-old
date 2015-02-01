@@ -3,12 +3,6 @@
 
 #include <stdint.h>
 
-void textmode_clear();
-void kprintf(const char * str, ...);
-void kputc(char c);
-void kputs(const char * str);
-void kputcolor(uint8_t color);
-
 #define makecolor(f, b) ((b << 4) | (f & 0xF))
 
 enum textmode_color {
@@ -29,5 +23,14 @@ enum textmode_color {
 	COLOR_LIGHT_BROWN = 14,
 	COLOR_WHITE = 15,
 };
+
+void textmode_clear();
+void kprintf(const char * str, ...);
+void kputc(char c);
+void kputs(const char * str);
+void kputcolor(uint8_t color);
+
+void panic(const char * str, ...); 
+
 
 #endif

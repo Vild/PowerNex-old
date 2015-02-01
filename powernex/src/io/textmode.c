@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <string.h>
 
+#include <powernex/elf.h>
 #include <powernex/io/port.h>
 
 const int TAB_SIZE = 8;
@@ -19,6 +20,7 @@ static int y = 0;
 
 static char * itoa(int value, char* result, int base);
 static void textmode_updateCursor();
+static void kprintf_(const char * str, va_list va);
 static inline void kputs_(const char * str);
 static inline void kputc_(char str);
 
@@ -30,9 +32,15 @@ void textmode_clear() {
 	textmode_updateCursor();
 }
 
+
 void kprintf(const char * str, ...) {
 	va_list va;
 	va_start(va, str);
+	kprintf_(str, va);
+	va_end(va);
+}
+
+static void kprintf_(const char * str, va_list va) {
 	char buf[64] = "";
 	while (*str) {
 		if (*str == '%') {
@@ -116,6 +124,19 @@ void kputcolor(uint8_t color) {
 	attr = color;
 }
 
+void panic(const char * str, ...) {
+	kputcolor(makecolor(COLOR_RED, COLOR_LIGHT_GREY));
+	kprintf("#### SYSTEM PANIC ####\n");
+	va_list va;
+	va_start(va, str);
+	kprintf_(str, va);
+	va_end(va);
+	kprintf("####  STACK TRACE ####\n");
+	elf_printStackTrace();
+	kprintf("######################\n");
+	while (1);
+}
+
 static void textmode_updateCursor() {
 	uint16_t loc = (uint16_t)(y * 80 + x);
 	outb(0x3D4, 14);                // Tell the VGA board we are setting the high cursor byte.
@@ -159,3 +180,4 @@ static char * itoa(int value, char* result, int base) {
 	
 	return result;
 }
+
