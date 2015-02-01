@@ -1,6 +1,7 @@
 bin
 lib
 cc
+obj
 PowerNex.sln
 PowerNex.dproj
 iso/boot/powernex.krl

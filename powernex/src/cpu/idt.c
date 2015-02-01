@@ -1,4 +1,5 @@
 #include <powernex/cpu/idt.h>
+#include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
 
 #include <string.h>
@@ -19,6 +20,17 @@ void idt_init() {
 
 	memset(idt_entries, 0, sizeof(idt_entry_t) * 255);
 
+	outb(0x20, 0x11);
+  outb(0xA0, 0x11);
+  outb(0x21, 0x20);
+  outb(0xA1, 0x28);
+  outb(0x21, 0x04);
+  outb(0xA1, 0x02);
+  outb(0x21, 0x01);
+  outb(0xA1, 0x01);
+  outb(0x21, 0x00);
+  outb(0xA1, 0x00);
+	
   idt_setGate( 0, (uint32_t)isr0 , 0x08, 0x8E);
   idt_setGate( 1, (uint32_t)isr1 , 0x08, 0x8E);
   idt_setGate( 2, (uint32_t)isr2 , 0x08, 0x8E);
@@ -52,6 +64,24 @@ void idt_init() {
   idt_setGate(30, (uint32_t)isr30, 0x08, 0x8E);
   idt_setGate(31, (uint32_t)isr31, 0x08, 0x8E);
 
+	idt_setGate(32, (uint32_t)irq0 , 0x08, 0x8E);
+	idt_setGate(33, (uint32_t)irq1 , 0x08, 0x8E);
+	idt_setGate(34, (uint32_t)irq2 , 0x08, 0x8E);
+	idt_setGate(35, (uint32_t)irq3 , 0x08, 0x8E);
+	idt_setGate(36, (uint32_t)irq4 , 0x08, 0x8E);
+	idt_setGate(37, (uint32_t)irq5 , 0x08, 0x8E);
+	idt_setGate(38, (uint32_t)irq6 , 0x08, 0x8E);
+	idt_setGate(39, (uint32_t)irq7 , 0x08, 0x8E);
+	idt_setGate(40, (uint32_t)irq8 , 0x08, 0x8E);
+	idt_setGate(41, (uint32_t)irq9 , 0x08, 0x8E);
+	idt_setGate(42, (uint32_t)irq10, 0x08, 0x8E);
+	idt_setGate(43, (uint32_t)irq11, 0x08, 0x8E);
+	idt_setGate(44, (uint32_t)irq12, 0x08, 0x8E);
+	idt_setGate(45, (uint32_t)irq13, 0x08, 0x8E);
+	idt_setGate(46, (uint32_t)irq14, 0x08, 0x8E);
+	idt_setGate(47, (uint32_t)irq15, 0x08, 0x8E);
+	idt_setGate(255, (uint32_t)isr255, 0x08, 0x8E);
+
 	idt_flush(&idt_ptr);
 }
 
@@ -75,4 +105,14 @@ void idt_handler(registers_t * regs) {
 		interruptHandlers[regs->int_no](regs);
 	else
 		kprintf("Unhandled interrupt: %d\n", regs->int_no);
+}
+
+void irq_handler(registers_t * regs) {
+	if (interruptHandlers[regs->int_no])
+		interruptHandlers[regs->int_no](regs);
+
+	if (regs->int_no >= 40)
+		outb(0xA0, 0x20);
+
+	outb(0x20, 0x20);
 }

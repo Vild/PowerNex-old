@@ -9,7 +9,7 @@ typedef struct {
 	uint8_t always0;
 	uint8_t flags;
 	uint16_t base_hi;
-} __attribute__((packed))idt_entry_t;
+} __attribute__((packed)) idt_entry_t;
 
 typedef struct {
 	uint16_t limit;
@@ -62,5 +62,24 @@ extern void isr30();
 extern void isr31();
 extern void isr255();
 
+
+extern void irq0();
+extern void irq1();
+extern void irq2();
+extern void irq3();
+extern void irq4();
+extern void irq5();
+extern void irq6();
+extern void irq7();
+extern void irq8();
+extern void irq9();
+extern void irq10();
+extern void irq11();
+extern void irq12();
+extern void irq13();
+extern void irq14();
+extern void irq15();
+
+#define IRQ(x) (32+x)
 
 #endif
