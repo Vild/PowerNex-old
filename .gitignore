@@ -1,0 +1,11 @@
+bin
+lib
+cc
+PowerNex.sln
+PowerNex.dproj
+iso/boot/powernex.krl
+bochsout.txt
+*.lock
+*.iso
+TAGS
+cscope.files
