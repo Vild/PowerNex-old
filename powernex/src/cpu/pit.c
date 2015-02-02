@@ -4,7 +4,7 @@
 #include <powernex/io/textmode.h>
 
 uint32_t tick = 0;
-static void pit_callback(__attribute__((unused)) registers_t * regs) {
+static void pit_callback(UNUSED registers_t * regs) {
 	tick++;
 	kprintf("\rTick: %d", tick);
 }

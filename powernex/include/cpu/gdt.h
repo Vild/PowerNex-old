@@ -1,6 +1,7 @@
 #ifndef GDT_H_
 #define GDT_H_
 
+#include <powernex/powernex.h>
 #include <stdint.h>
 
 typedef struct {

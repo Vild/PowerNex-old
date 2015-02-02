@@ -1,6 +1,7 @@
 #ifndef TEXTMODE_H_
 #define TEXTMODE_H_
 
+#include <powernex/powernex.h>
 #include <stdint.h>
 
 #define makecolor(f, b) ((b << 4) | (f & 0xF))
@@ -29,8 +30,5 @@ void kprintf(const char * str, ...);
 void kputc(char c);
 void kputs(const char * str);
 void kputcolor(uint8_t color);
-
-void panic(const char * str, ...); 
-
 
 #endif

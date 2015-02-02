@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Sun Feb  1 23:32:50 2015
+;; Created Mon Feb  2 23:21:00 2015
 ;; Desktop file format version 206
 ;; Emacs version 24.4.1
 
@@ -11,30 +11,19 @@
 (setq desktop-missing-file-warning nil)
 (setq tags-file-name nil)
 (setq tags-table-list '("/home/wildn00b/OSDev/PowerNex/TAGS"))
-(setq search-ring '("struct " "none" "multiboot_info" "multiboot"))
+(setq search-ring '("mmap" "struct " "none" "multiboot_info" "multiboot"))
 (setq regexp-search-ring nil)
 (setq register-alist nil)
-(setq file-name-history '("~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h" "~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h" "~/OSDev/PowerNex/.gitignore" "~/OSDev/PowerNex/powernex/src/cpu/pit.c" "~/OSDev/PowerNex/powernex/include/cpu/pit.h" "~/OSDev/PowerNex/README.MD" "~/OSDev/PowerNex/README.md" "~/OSDev/PowerNex/.gitignore" "~/OSDev/PowerNex/bochsout.txt" "~/OSDev/PowerNex/powernex/include/*" "~/OSDev/PowerNex/powernex/include/cpu/*" "~/OSDev/PowerNex/powernex/src/cpu/*" "~/OSDev/PowerNex/powernex/src/cpu/gdt_s.S" "~/OSDev/PowerNex/powernex/src/cpu/gdt.c" "~/OSDev/PowerNex/powernex/include/cpu/gdt.h" "~/OSDev/PowerNex/powernex/src/cpu" "~/OSDev/PowerNex/powernex/include/cpu" "~/OSDev/PowerNex-d/powernex/src/powernex/io/textmode.d" "~/OSDev/PowerNex/powernex/include/string.h" "~/OSDev/PowerNex/powernex/include/io/string.h" "~/OSDev/PowerNex/powernex/src/io/string.c" "~/OSDev/PowerNex-d/powernex/src/powernex/io/textmode.d" "~/OSDev/PowerNex/Makefile" "~/OSDev/PowerNex/bochsrc.txt" "~/OSDev/PowerNex/powernex/include/*" "~/OSDev/PowerNex/powernex/include/*/*" "~/OSDev/PowerNex/powernex/src/*/*" "~/OSDev/PowerNex/powernex/src/*"))
+(setq file-name-history '("~/OSDev/PowerNex/Makefile" "~/OSDev/PowerNex/powernex/src/mem/vmm.c" "~/OSDev/PowerNex/powernex/src/mem/vmm.cv" "~/OSDev/PowerNex/powernex/include/powernex.h" "~/OSDev/PowerNex/powernex/include/global.h" "~/OSDev/PowerNex/powernex/src/mem/" "~/OSDev/PowerNex/powernex/src/mem/pmm.c" "~/OSDev/PowerNex/powernex/include/mem/vmm.h" "~/OSDev/PowerNex/powernex/include/mem/" "~/OSDev/PowerNex/powernex/include/mem/pmm.h" "~/OSDev/PowerNex/powernex/include/mem/ppm.h" "~/OSDev/PowerNex/powernex/include/mem" "~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h" "~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h" "~/OSDev/PowerNex/.gitignore" "~/OSDev/PowerNex/powernex/src/cpu/pit.c" "~/OSDev/PowerNex/powernex/include/cpu/pit.h" "~/OSDev/PowerNex/README.MD" "~/OSDev/PowerNex/README.md" "~/OSDev/PowerNex/.gitignore" "~/OSDev/PowerNex/bochsout.txt" "~/OSDev/PowerNex/powernex/include/*" "~/OSDev/PowerNex/powernex/include/cpu/*" "~/OSDev/PowerNex/powernex/src/cpu/*" "~/OSDev/PowerNex/powernex/src/cpu/gdt_s.S" "~/OSDev/PowerNex/powernex/src/cpu/gdt.c" "~/OSDev/PowerNex/powernex/include/cpu/gdt.h" "~/OSDev/PowerNex/powernex/src/cpu"))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/elf.c"
-  "elf.c"
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/multiboot.h"
+  "multiboot.h"
   'c-mode
   '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1315
-  '(1129 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/boot.S"
-  "boot.S"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  604
-  '(578 nil)
+  5271
+  '(5264 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
@@ -44,8 +33,140 @@
   "textmode.c"
   'c-mode
   '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  2968
-  '(2470 nil)
+  1701
+  '(1795 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/main.c"
+  "main.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  829
+  '(286 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/io/port.c"
+  "port.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/bochsrc.txt"
+  "bochsrc.txt"
+  'text-mode
+  '(yas-minor-mode linum-mode)
+  1331
+  '(1869 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/Makefile"
+  "Makefile"
+  'makefile-gmake-mode
+  '(yas-minor-mode linum-mode)
+  659
+  '(737 nil)
+  nil
+  nil
+  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/build.mk"
+  "build.mk"
+  'makefile-gmake-mode
+  '(yas-minor-mode linum-mode)
+  590
+  '(211 nil)
+  nil
+  nil
+  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/link.ld"
+  "link.ld"
+  'ld-script-mode
+  '(yas-minor-mode linum-mode)
+  527
+  '(524 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/mem/vmm.c"
+  "vmm.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  641
+  '(1671 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/boot.S"
+  "boot.S"
+  'asm-mode
+  '(yas-minor-mode linum-mode)
+  451
+  '(578 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/mem/vmm.h"
+  "vmm.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  635
+  '(288 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/mem/pmm.c"
+  "pmm.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  408
+  '(31 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/idt.h"
+  "idt.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  62
+  '(31 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/powernex.h"
+  "powernex.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  149
+  '(81 nil)
   nil
   nil
   '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
@@ -55,30 +176,118 @@
   "textmode.h"
   'c-mode
   '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  467
-  '(61 nil)
+  644
+  '(644 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/main.c"
-  "main.c"
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/pit.c"
+  "pit.c"
   'c-mode
   '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  798
-  '(875 nil)
+  509
+  '(170 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/mem/pmm.h"
+  "pmm.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  229
+  '(105 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/io/port.h"
+  "port.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  64
+  '(33 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/pit.h"
+  "pit.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  66
+  '(35 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/gdt.h"
+  "gdt.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  62
+  '(31 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/include/string.h"
+  "string.h"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  68
+  '(37 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
 
 (desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/powernex/include/elf.h"
   "elf.h"
   'c-mode
   '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  606
-  '(677 nil)
+  31
+  '(62 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/idt.c"
+  "idt.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  4018
+  '(3058 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/gdt.c"
+  "gdt.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  945
+  '(95 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wildn00b/OSDev/PowerNex/powernex/src/elf.c"
+  "elf.c"
+  'c-mode
+  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  1024
+  '(1024 nil)
   nil
   nil
   '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
@@ -95,39 +304,6 @@
   '((buffer-file-coding-system . utf-8-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/string.h"
-  "string.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  330
-  '(299 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/multiboot.h"
-  "multiboot.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  6566
-  '(7011 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/link.ld"
-  "link.ld"
-  'ld-script-mode
-  '(yas-minor-mode linum-mode)
-  527
-  '(524 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/.gitignore"
   ".gitignore"
   'fundamental-mode
@@ -137,61 +313,6 @@
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/Makefile"
-  "Makefile"
-  'makefile-gmake-mode
-  '(yas-minor-mode linum-mode)
-  1120
-  '(737 nil)
-  nil
-  nil
-  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/bochsrc.txt"
-  "bochsrc.txt"
-  'text-mode
-  '(yas-minor-mode linum-mode)
-  1573
-  '(1751 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/pit.c"
-  "pit.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  526
-  '(61 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/idt.h"
-  "idt.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1302
-  '(1282 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/pit.h"
-  "pit.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  100
-  '(100 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
 
 (desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/idt_s.S"
@@ -205,28 +326,6 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/idt.c"
-  "idt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  4018
-  '(3058 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/gdt.h"
-  "gdt.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  199
-  '(173 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/README.MD"
   "README.MD"
   'markdown-mode
@@ -238,17 +337,6 @@
   '((tab-width . 4) (buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/gdt.c"
-  "gdt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  945
-  '(95 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/gdt_s.S"
   "gdt_s.S"
   'asm-mode
@@ -258,39 +346,6 @@
   nil
   nil
   '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/build.mk"
-  "build.mk"
-  'makefile-gmake-mode
-  '(yas-minor-mode linum-mode)
-  590
-  '(211 nil)
-  nil
-  nil
-  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/io/port.h"
-  "port.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/io/port.c"
-  "port.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
   "/home/wildn00b/OSDev/PowerNex/.emacs-ide-project.cfg"

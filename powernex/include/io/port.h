@@ -1,6 +1,7 @@
 #ifndef PORT_H_
 #define PORT_H_
 
+#include <powernex/powernex.h>
 #include <stdint.h>
 
 void outb(uint16_t port, uint8_t value);

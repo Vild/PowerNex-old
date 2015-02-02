@@ -1,6 +1,8 @@
 #ifndef ELF_H_
 #define ELF_H_
 
+#include <powernex/powernex.h>
+
 #include <stdint.h>
 #include <powernex/multiboot.h>
 

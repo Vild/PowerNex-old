@@ -91,6 +91,7 @@ void kputc(char str) {
 }
 
 static inline void kputc_(char c) {
+	outb(0xE9, c); //BOCHS
 	if (c == '\n') {
 		x = 0;
 		y++;
