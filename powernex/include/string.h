@@ -1,6 +1,7 @@
 #ifndef STRING_H_
 #define STRING_H_
 
+#include <powernex/powernex.h>
 #include <stddef.h>
 
 int memcmp(const void *, const void *, size_t);

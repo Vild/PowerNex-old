@@ -36,8 +36,8 @@ start:
   call kmain
 
 halt:
-  cli
-  hlt
+ // cli
+ // hlt
   jmp halt
 
 .section .bss
