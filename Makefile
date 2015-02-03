@@ -28,7 +28,7 @@ iso: powernex.iso
 
 powernex.iso: bin/powernex.krl
 	cp bin/powernex.krl iso/boot
-	grub-mkrescue -o powernex.iso iso
+	grub-mkrescue -d /usr/lib/grub/i386-pc -o powernex.iso iso
 
 bochs: bochsrc.txt powernex.iso
 	bochs -f bochsrc.txt -q || true
