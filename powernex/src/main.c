@@ -11,9 +11,9 @@
 #include <powernex/mem/pmm.h>
 #include <powernex/mem/vmm.h>
 
-void a();
+/*void a();
 void b();
-void c();
+void c();*/
 
 int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
 	textmode_clear(); // Also initalizes textmode
@@ -29,10 +29,7 @@ int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
 	idt_init();
 	pit_init(20);
 
-	if (inb(0xE9) == 0xE9)
-		kprintf("Bochs detected\n");
-	
-  pmm_init(multiboot->mem_upper);
+	pmm_init(multiboot->mem_upper);
 	vmm_init();
 
 	uint32_t i = multiboot->mmap_addr;
@@ -46,16 +43,17 @@ int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
     i += me->size + sizeof(uint32_t);
 	}
 
-	elf_init(&multiboot->u.elf_sec);
+	elf_init(&(multiboot->u.elf_sec));
 	//a();
 	
 
-	__asm__ volatile("sti");
+	//__asm__ volatile("sti");
 	while(true);
 	
 	return 0xDEADBEEF;
 }
 
+/*
 void a() {
 	b();
 }
@@ -67,3 +65,4 @@ void b() {
 void c() {
 	panic("WOW, works\n");
 }
+*/

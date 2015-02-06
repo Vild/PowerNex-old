@@ -6,7 +6,7 @@
 uint32_t tick = 0;
 static void pit_callback(UNUSED registers_t * regs) {
 	tick++;
-	kprintf("\rTick: %d", tick);
+	//kprintf("\rTick: %d", tick);
 }
 
 void pit_init(uint32_t frequency) {

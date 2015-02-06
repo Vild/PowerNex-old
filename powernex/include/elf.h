@@ -37,10 +37,8 @@ typedef struct {
 	uint32_t strtabsz;
 } elf_t;
 
-extern elf_t kernel_elf;
-
 void elf_init(multiboot_elf_section_header_table_t * header);
-const char * elf_lookupSymbol(uint32_t addr, elf_t * elf);
+const char * elf_lookupSymbol(uint32_t addr);
 
 void elf_printStackTrace();
 

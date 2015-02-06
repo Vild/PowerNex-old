@@ -22,12 +22,12 @@ isr\num:
   jmp isr_common_stub
 .endm
 
-.macro IRQ num inum
+.macro IRQ num isrnum
 .global irq\num
 irq\num:
   cli
 	push $0
-	push $\inum
+	push $\isrnum
 	jmp irq_common_stub
 .endm
 

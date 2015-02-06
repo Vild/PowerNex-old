@@ -1,8 +1,22 @@
 #include <string.h>
 
-void * memmove(void* dstptr, const void* srcptr, size_t size) {
-	unsigned char* dst = (unsigned char*) dstptr;
-	const unsigned char* src = (const unsigned char*) srcptr;
+
+// Copy len bytes from src to dest.
+void memcpy(void * dst, const void * src_, uint32_t len) {
+	uint8_t * dest = (uint8_t *)dst;
+	const uint8_t * src = (uint8_t *)src_;
+  for(; len != 0; len--) *dest++ = *src++;
+}
+
+// Write len copies of val into dest.
+void memset(void * dst, uint8_t val, uint32_t len) {
+	uint8_t * dest = (uint8_t *)dst;
+  for ( ; len != 0; len--) *dest++ = val;
+}
+
+void * memmove(void * dstptr, const void * srcptr, size_t size) {
+	unsigned char * dst = (unsigned char*) dstptr;
+	const unsigned char * src = (const unsigned char*) srcptr;
 	if (dst < src)
 		for (size_t i = 0; i < size; i++)
 			dst[i] = src[i];
@@ -12,42 +26,39 @@ void * memmove(void* dstptr, const void* srcptr, size_t size) {
 	return dstptr;
 }
 
-size_t strlen(const char* string) {
-	size_t result = 0;
-	while (string[result])
-		result++;
-	return result;
+int strcmp(const char * str1, const char * str2) {
+  while (*str1 && *str2 && (*str1++ == *str2++))
+    ;
+
+  if (*str1 == '\0' && *str2 == '\0')
+    return 0;
+
+  if (*str1 == '\0')
+    return -1;
+  else
+		return 1;
 }
 
-int memcmp(const void* aptr, const void* bptr, size_t size) {
-	const unsigned char* a = (const unsigned char*) aptr;
-	const unsigned char* b = (const unsigned char*) bptr;
-	for (size_t i = 0; i < size; i++)
-		if (a[i] < b[i])
-			return -1;
-		else if (b[i] < a[i])
-			return 1;
-	return 0;
+char * strcpy(char * dest, const char * src) {
+  while (*src)
+    *dest++ = *src++;
+  *dest = '\0';
+	return dest;
 }
 
-void * memset(void* bufptr, int value, size_t size) {
-	unsigned char* buf = (unsigned char*) bufptr;
-	for (size_t i = 0; i < size; i++)
-		buf[i] = (unsigned char) value;
-	return bufptr;
+char * strcat(char * dest, const char * src) {
+  while (*(dest++));
+
+  while (*src)
+    *dest++ = *src++;
+  *dest = '\0';
+  return dest;
 }
 
-void * memcpy(void * restrict dstptr, const void * restrict srcptr, size_t size) {
-	unsigned char * dst = (unsigned char *) dstptr;
-	const unsigned char * src = (const unsigned char *) srcptr;
-	for (size_t i = 0; i < size; i++)
-		dst[i] = src[i];
-	return dstptr;
+int strlen(const char * src) {
+  int i = 0;
+  while (*src++)
+    i++;
+  return i;
 }
 
-size_t strcmp(const char * str1, const char * str2) {
-	size_t res = 0;
-	while (!(res = *str1 - *str2) && *str2)
-		++str1, ++str2;
-	return res;
-}
