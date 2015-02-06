@@ -5,4 +5,6 @@
 
 void panic(const char * str, ...); //Located in textmode.c
 
+#define DEBUG() kprintf("%s:%s@%i\n", __FILE__, __FUNCTION__, __LINE__); __asm__ volatile("xchgw %bx, %bx")
+	
 #endif

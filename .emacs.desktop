@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Tue Feb  3 23:53:58 2015
+;; Created Fri Feb  6 11:13:27 2015
 ;; Desktop file format version 206
 ;; Emacs version 24.4.1
 
@@ -10,304 +10,40 @@
 (setq desktop-saved-frameset nil)
 (setq desktop-missing-file-warning nil)
 (setq tags-file-name nil)
-(setq tags-table-list '("/home/wildn00b/OSDev/PowerNex/TAGS"))
-(setq search-ring '("memset" "mmap" "struct " "none" "multiboot_info" "multiboot"))
+(setq tags-table-list '("/home/wild/PowerNex/TAGS"))
+(setq search-ring '("display" "memset" "mmap" "struct " "none" "multiboot_info" "multiboot"))
 (setq regexp-search-ring nil)
 (setq register-alist nil)
-(setq file-name-history '("~/OSDev/jamesm-tutorials-read-only/build/chapter_7/scripts/bochsrc.txt" "~/OSDev/PowerNex/powernex/link.ld" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/link.ld" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/*" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/elf.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/boot.s" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/main.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/ppm.c" "~/OSDev/PowerNex/Makefile" "~/OSDev/PowerNex/powernex/src/mem/vmm.c" "~/OSDev/PowerNex/powernex/src/mem/vmm.cv" "~/OSDev/PowerNex/powernex/include/powernex.h" "~/OSDev/PowerNex/powernex/include/global.h" "~/OSDev/PowerNex/powernex/src/mem/" "~/OSDev/PowerNex/powernex/src/mem/pmm.c" "~/OSDev/PowerNex/powernex/include/mem/vmm.h" "~/OSDev/PowerNex/powernex/include/mem/" "~/OSDev/PowerNex/powernex/include/mem/pmm.h" "~/OSDev/PowerNex/powernex/include/mem/ppm.h" "~/OSDev/PowerNex/powernex/include/mem" "~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h" "~/OSDev/PowerNex/powernex/src/elf.c" "~/OSDev/PowerNex/powernex/include/elf.h"))
+(setq file-name-history '("~/PowerNex/bochsrc.txt" "~/PowerNex/powernex/*/*/*" "~/PowerNex/powernex/*/*" "~/PowerNex/powernex/*" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/scripts/bochsrc.txt" "~/OSDev/PowerNex/powernex/link.ld" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/link.ld" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/*" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/elf.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/boot.s" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/main.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.h" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.c" "~/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/ppm.c" "~/OSDev/PowerNex/Makefile" "~/OSDev/PowerNex/powernex/src/mem/vmm.c" "~/OSDev/PowerNex/powernex/src/mem/vmm.cv" "~/OSDev/PowerNex/powernex/include/powernex.h" "~/OSDev/PowerNex/powernex/include/global.h" "~/OSDev/PowerNex/powernex/src/mem/" "~/OSDev/PowerNex/powernex/src/mem/pmm.c" "~/OSDev/PowerNex/powernex/include/mem/vmm.h" "~/OSDev/PowerNex/powernex/include/mem/" "~/OSDev/PowerNex/powernex/include/mem/pmm.h" "~/OSDev/PowerNex/powernex/include/mem/ppm.h" "~/OSDev/PowerNex/powernex/include/mem"))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/mem/vmm.c"
-  "vmm.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  225
-  '(163 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/scripts/bochsrc.txt"
-  "bochsrc.txt"
-  'text-mode
-  '(yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/link.ld"
-  "link.ld"
-  'ld-script-mode
-  '(yas-minor-mode linum-mode)
-  660
-  '(660 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/link.ld"
-  "link.ld"
-  'ld-script-mode
-  '(yas-minor-mode linum-mode)
-  528
-  '(528 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/multiboot.h"
-  "multiboot.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  5170
-  '(5264 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/multiboot.h"
-  "multiboot.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1112
-  '(667 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/main.c"
-  "main.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1261
-  '(1173 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/main.c"
-  "main.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  849
-  '(1014 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.c"
-  "pmm.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1335
-  '(1335 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/mem/pmm.c"
-  "pmm.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  815
-  '(336 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/mem/pmm.h"
-  "pmm.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  268
-  '(260 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/pmm.h"
-  "pmm.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  332
-  '(226 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.h"
-  "vmm.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  716
-  '(510 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/mem/vmm.h"
-  "vmm.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  635
-  '(278 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/boot.s"
-  "boot.s"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  2182
-  '(775 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/boot.S"
-  "boot.S"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  617
-  '(578 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vmm.c"
-  "vmm.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1441
-  '(1490 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/io/string.c"
-  "string.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1071
-  '(1141 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/idt.h"
+  "/home/wild/PowerNex/powernex/include/cpu/idt.h"
   "idt.h"
   'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1557
-  '(83 nil)
+  '(abbrev-mode linum-mode)
+  508
+  '(508 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/pit.h"
+  "/home/wild/PowerNex/powernex/src/mem/vmm.c"
+  "vmm.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  3027
+  '(2910 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/cpu/pit.h"
   "pit.h"
   'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  66
-  '(35 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/string.h"
-  "string.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  176
-  '(141 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.c"
-  "common.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  515
-  '(798 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/common.h"
-  "common.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  618
-  '(618 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/io/textmode.c"
-  "textmode.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  3657
-  '(1692 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/pit.c"
-  "pit.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  511
-  '(170 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vsprintf.h"
-  "vsprintf.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  125
-  '(125 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/vsprintf.c"
-  "vsprintf.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
+  '(abbrev-mode linum-mode)
   1
   '(nil nil)
   nil
@@ -315,365 +51,277 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/timer.h"
-  "timer.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  237
-  '(237 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/timer.c"
-  "timer.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  950
-  '(950 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/printk.h"
-  "printk.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/printk.c"
-  "printk.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/panic.h"
-  "panic.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/panic.c"
-  "panic.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/monitor.c"
-  "monitor.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/idt_s.S"
-  "idt_s.S"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  1778
-  '(1800 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/idt_s.s"
-  "idt_s.s"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  4358
-  '(2326 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/gdt_s.S"
-  "gdt_s.S"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  192
-  '(149 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/idt.h"
-  "idt.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  2784
-  '(2784 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/idt.c"
-  "idt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  3656
-  '(4022 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/idt.c"
-  "idt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  5026
-  '(3699 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/gdt_s.s"
-  "gdt_s.s"
-  'asm-mode
-  '(yas-minor-mode linum-mode)
-  737
-  '(737 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/gdt.c"
-  "gdt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1513
-  '(1513 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/cpu/gdt.c"
-  "gdt.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  945
-  '(95 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/elf.h"
-  "elf.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/elf.c"
-  "elf.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  694
-  '(997 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/gdt.h"
-  "gdt.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/jamesm-tutorials-read-only/build/chapter_7/src/monitor.h"
-  "monitor.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/.emacs-ide-project.cfg"
-  ".emacs-ide-project.cfg"
-  'emacs-ide-config-mode
-  '(yas-minor-mode linum-mode)
-  2860
-  '(613 nil)
-  nil
-  nil
-  '((show-trailing-whitespace) (buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/elf.h"
-  "elf.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  596
-  '(668 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/elf.c"
-  "elf.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  587
-  '(82 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/src/io/port.c"
-  "port.c"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/bochsrc.txt"
+  "/home/wild/PowerNex/bochsrc.txt"
   "bochsrc.txt"
   'text-mode
-  '(yas-minor-mode linum-mode)
-  1331
-  '(1869 nil)
+  '(linum-mode)
+  201
+  '(2 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/Makefile"
-  "Makefile"
-  'makefile-gmake-mode
-  '(yas-minor-mode linum-mode)
-  659
-  '(737 nil)
-  nil
-  nil
-  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/build.mk"
-  "build.mk"
-  'makefile-gmake-mode
-  '(yas-minor-mode linum-mode)
-  590
-  '(211 nil)
-  nil
-  nil
-  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/powernex.h"
+  "/home/wild/PowerNex/powernex/include/powernex.h"
   "powernex.h"
   'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  149
-  '(81 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/io/textmode.h"
-  "textmode.h"
-  'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  644
-  '(644 nil)
+  '(abbrev-mode linum-mode)
+  259
+  '(150 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/io/port.h"
+  "/home/wild/PowerNex/powernex/include/string.h"
+  "string.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/cpu/pit.c"
+  "pit.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/build.mk"
+  "build.mk"
+  'makefile-gmake-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/link.ld"
+  "link.ld"
+  'ld-script-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/boot.S"
+  "boot.S"
+  'asm-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/elf.c"
+  "elf.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/main.c"
+  "main.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/elf.h"
+  "elf.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/multiboot.h"
+  "multiboot.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/mem/pmm.h"
+  "pmm.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/mem/vmm.h"
+  "vmm.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/io/port.h"
   "port.h"
   'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  64
-  '(33 nil)
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/powernex/include/cpu/gdt.h"
+  "/home/wild/PowerNex/powernex/include/io/textmode.h"
+  "textmode.h"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/include/cpu/gdt.h"
   "gdt.h"
   'c-mode
-  '(abbrev-mode auto-complete-mode yas-minor-mode linum-mode)
-  62
-  '(31 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . utf-8-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/.gitignore"
-  ".gitignore"
-  'fundamental-mode
-  '(yas-minor-mode linum-mode)
-  110
-  '(110 nil)
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/wildn00b/OSDev/PowerNex/README.MD"
-  "README.MD"
-  'markdown-mode
-  '(yas-minor-mode linum-mode)
-  227
-  '(227 nil)
+  "/home/wild/PowerNex/powernex/src/mem/pmm.c"
+  "pmm.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
   nil
   nil
-  '((tab-width . 4) (buffer-file-coding-system . undecided-unix)))
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/io/port.c"
+  "port.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/io/string.c"
+  "string.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/io/textmode.c"
+  "textmode.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/cpu/gdt.c"
+  "gdt.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/cpu/gdt_s.S"
+  "gdt_s.S"
+  'asm-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/cpu/idt.c"
+  "idt.c"
+  'c-mode
+  '(abbrev-mode linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/powernex/src/cpu/idt_s.S"
+  "idt_s.S"
+  'asm-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/wild/PowerNex/.emacs-ide-project.cfg"
+  ".emacs-ide-project.cfg"
+  'emacs-ide-config-mode
+  '(linum-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
 
