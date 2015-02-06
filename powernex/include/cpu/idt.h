@@ -4,6 +4,8 @@
 #include <powernex/powernex.h>
 #include <stdint.h>
 
+#define IRQ(x) (32+x)
+
 typedef struct {
 	uint16_t base_lo;
 	uint16_t sel;
@@ -81,6 +83,5 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-#define IRQ(x) (32+x)
 
 #endif

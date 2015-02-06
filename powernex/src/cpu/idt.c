@@ -22,13 +22,17 @@ void idt_init() {
 
 	outb(0x20, 0x11);
   outb(0xA0, 0x11);
+	
   outb(0x21, 0x20);
   outb(0xA1, 0x28);
-  outb(0x21, 0x04);
+
+	outb(0x21, 0x04);
   outb(0xA1, 0x02);
-  outb(0x21, 0x01);
+
+	outb(0x21, 0x01);
   outb(0xA1, 0x01);
-  outb(0x21, 0x00);
+
+	outb(0x21, 0x00);
   outb(0xA1, 0x00);
 	
   idt_setGate( 0, (uint32_t)isr0 , 0x08, 0x8E);
@@ -104,15 +108,15 @@ void idt_handler(registers_t * regs) {
 	if (interruptHandlers[regs->int_no])
 		interruptHandlers[regs->int_no](regs);
 	else
-		kprintf("Unhandled interrupt: %d\n", regs->int_no);
+		panic("Unhandled interrupt: %d\n", regs->int_no);
 }
 
 void irq_handler(registers_t * regs) {
-	if (interruptHandlers[regs->int_no])
-		interruptHandlers[regs->int_no](regs);
-
 	if (regs->int_no >= 40)
 		outb(0xA0, 0x20);
 
 	outb(0x20, 0x20);
+
+	if (interruptHandlers[regs->int_no])
+		interruptHandlers[regs->int_no](regs);
 }

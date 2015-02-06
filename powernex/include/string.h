@@ -3,12 +3,14 @@
 
 #include <powernex/powernex.h>
 #include <stddef.h>
+#include <stdint.h>
 
-int memcmp(const void *, const void *, size_t);
-void * memcpy(void * __restrict, const void * __restrict, size_t);
+void memcpy(void * dest, const void * src, uint32_t len);
+void memset(void * dest, uint8_t val, uint32_t len);
 void * memmove(void *, const void *, size_t);
-void * memset(void *, int, size_t);
-size_t strlen(const char *);
-size_t strcmp(const char * str1, const char * str2);
+int strcmp(const char * str1, const char * str2);
+char * strcpy(char * dest, const char * src);
+char * strcat(char * dest, const char * src);
+int strlen(const char * src);
 
 #endif

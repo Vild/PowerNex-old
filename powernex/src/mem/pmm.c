@@ -4,7 +4,7 @@
 uint32_t pmm_stackLoc = PMM_STACK_ADDR;
 uint32_t pmm_stackMax = PMM_STACK_ADDR;
 uint32_t pmm_location;
-bool pmm_pagingActive;
+bool pmm_pagingActive = 0;
 
 void pmm_init(uint32_t start) {
 	pmm_location = (start + 0x1000) & PAGE_MASK;

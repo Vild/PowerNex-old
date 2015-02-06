@@ -18,7 +18,8 @@ static uint8_t attr = makecolor(COLOR_CYAN, COLOR_BLACK);
 static int x = 0;
 static int y = 0;
 
-static char * itoa(int value, char* result, int base);
+static char * itoa(int32_t value, char* result, int base);
+static char * utoa(uint32_t value, char* result, int base);
 static void textmode_updateCursor();
 static void kprintf_(const char * str, va_list va);
 static inline void kputs_(const char * str);
@@ -49,20 +50,40 @@ static void kprintf_(const char * str, va_list va) {
 				break;
 			
 			switch (*str) {
-			case 'c':
-				kputc((char)va_arg(va, int));
+			case 'd':
+			case 'i':
+				kputs(itoa(va_arg(va, int), buf, 10));
+				break;
+			case 'u':
+				kputs(utoa(va_arg(va, uint32_t), buf, 10));
+				break;
+			case 'f':
+			case 'F':
+			case 'e':
+			case 'E':
+			case 'g':
+			case 'G':
+			case 'a':
+			case 'A':
+				(void)va_arg(va, double);
+				break;
+			case 'x':
+			case 'X':
+				kputs(utoa(va_arg(va, uint32_t), buf, 16));
+				break;
+			case 'o':
+				kputs(itoa(va_arg(va, int), buf, 8));
 				break;
 			case 's':
 				kputs(va_arg(va, const char *));
 				break;
+			case 'c':
+				kputc((char)va_arg(va, int));
+				break;
+			case 'p':
+				kputs(utoa((uint32_t)va_arg(va, void *), buf, 16));
 			case 'b':
 				kputs(itoa(va_arg(va, int), buf, 2));
-				break;
-			case 'd':
-				kputs(itoa(va_arg(va, int), buf, 10));
-				break;
-			case 'x':
-				kputs(itoa(va_arg(va, int), buf, 16));
 				break;
 			default:
 //				kput(*str);
@@ -152,7 +173,7 @@ static void textmode_updateCursor() {
  * Released under GPLv3.
 
  */
-static char * itoa(int value, char* result, int base) {
+static char * itoa(int32_t value, char* result, int base) {
 	// check that the base if valid
 	if (base < 2 || base > 36) {
 		*result = '\0';
@@ -160,7 +181,7 @@ static char * itoa(int value, char* result, int base) {
 	}
 
 	char* ptr = result, *ptr1 = result, tmp_char;
-	int tmp_value;
+	int32_t tmp_value;
 
 	do {
 		tmp_value = value;
@@ -171,6 +192,35 @@ static char * itoa(int value, char* result, int base) {
 	// Apply negative sign
 	if (tmp_value < 0)
 		*ptr++ = '-';
+	*ptr-- = '\0';
+	
+	while(ptr1 < ptr) {
+		tmp_char = *ptr;
+		*ptr--= *ptr1;
+		*ptr1++ = tmp_char;
+	}
+	
+	return result;
+}
+
+
+static char * utoa(uint32_t value, char* result, int base) {
+	// check that the base if valid
+	if (base < 2 || base > 36) {
+		*result = '\0';
+		return result;
+	}
+
+	char* ptr = result, *ptr1 = result, tmp_char;
+	uint32_t tmp_value;
+
+	do {
+		tmp_value = value;
+		value /= base;
+		*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+	} while (value);
+
+	// Apply negative sign
 	*ptr-- = '\0';
 	
 	while(ptr1 < ptr) {
