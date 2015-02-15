@@ -34,11 +34,19 @@ bochs: bochsrc.txt powernex.iso
 	bochs -f bochsrc.txt -q || true
 
 
+
 ###################################################################
 # What follows are several templates (think "functions"), which are
 # later instantiated for each registered module ($(1) being the
 # module name).
 ###################################################################
+
+.PHONY: FORCE
+FORCE:
+
+buildinfo.c: FORCE
+	./buildinfo.sh
+
 
 # Including a module's build.mk
 define MK_template
@@ -47,6 +55,11 @@ endef
 
 # Setting a module's build rules for object files in <module>/obj.
 define RULES_template
+$(1)/obj/buildinfo.o: buildinfo.c
+	@mkdir -p $$(dir $$@)
+	@echo Compiling $$<
+	@$$(CC) $$(CFLAGS) $$(CFLAGS_$(1)) -Iincludes/$(2) -c $$< -o $$@
+
 $(1)/obj/%.o: $(1)/src/%.c
 	@mkdir -p $$(dir $$@)
 	@echo Compiling $$<
@@ -62,7 +75,7 @@ endef
 # Also adds a module's dependency files to the global list.
 define PROGRAM_template
 #DEPENDENCIES := $(DEPENDENCIES) $(patsubst %,$(2)/obj/%.d,$(basename $($(1)_SOURCES)))
-bin/$(1): $(patsubst %,$(2)/obj/%.o,$(basename $($(1)_SOURCES))) $(foreach library,$($(1)_LIBRARIES),lib/$(library))
+bin/$(1): $(2)/obj/buildinfo.o $(patsubst %,$(2)/obj/%.o,$(basename $($(1)_SOURCES))) $(foreach library,$($(1)_LIBRARIES),lib/$(library))
 	@mkdir -p $$(dir $$@)
 	@echo Linking $$@
 	@$$(LD) $$(LDFLAGS) $$(LDFLAGS_$(2)) $$^ -o $$@
@@ -72,7 +85,7 @@ endef
 # (Depending on its sources' object files.)
 define ARCHIVE_template
 #DEPENDENCIES := $(DEPENDENCIES) $(patsubst %,$(2)/obj/%.d,$(basename $($(1)_SOURCES)))
-lib/$(1): $(patsubst %,$(2)/obj/%.o,$(basename $($(1)_SOURCES)))
+lib/$(1): $(2)/obj/git-version.o $(patsubst %,$(2)/obj/%.o,$(basename $($(1)_SOURCES)))
 	@mkdir -p $$(dir $$@)
 	@$$(AR) $$(ARFLAGS) $$@ $$?
 endef

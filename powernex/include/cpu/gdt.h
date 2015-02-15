@@ -2,7 +2,6 @@
 #define GDT_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
 
 typedef struct {
 	uint16_t limit_low;

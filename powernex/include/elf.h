@@ -3,7 +3,6 @@
 
 #include <powernex/powernex.h>
 
-#include <stdint.h>
 #include <powernex/multiboot.h>
 
 #define ELF32_ST_TYPE(i) ((i) & 0xF)

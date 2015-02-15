@@ -3,8 +3,9 @@
 
 #define UNUSED __attribute__((unused))
 #include <stddef.h>
+#include <stdint.h>
 #include <stdbool.h>
-
+#include <buildinfo.h>
 
 void panic(const char * str, ...); //Located in textmode.c
 

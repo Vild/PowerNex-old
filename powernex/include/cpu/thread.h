@@ -2,7 +2,6 @@
 #define THREAD_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
 
 #ifndef SCHEDULER_H_ // Work around circular dependencies
 typedef struct thread_list thread_list_t;

@@ -10,11 +10,11 @@ const int TAB_SIZE = 8;
 const int WIDTH = 80;
 const int HEIGHT = 25;
 
-#define makechar(c) (c | (attr << 8))
+#define makechar(c) ((c & 0xFF) | ((attr & 0xFF) << 8))
 
 static uint16_t * vidmem = (uint16_t *)0xB8000;
 
-static uint8_t attr = makecolor(COLOR_CYAN, COLOR_BLACK);
+static uint8_t attr = DEFAULT_COLOR;
 static int x = 0;
 static int y = 0;
 
@@ -124,7 +124,7 @@ static inline void kputc_(char c) {
 		if (x < 0)
 			x = 0;
 	} else if (c == '\t')
-		x = (x+TAB_SIZE) & ~TAB_SIZE;
+		x = (x+TAB_SIZE) & ~TAB_SIZE; //TODO: Fix
 	else {
 		vidmem[(y * WIDTH) + x] = makechar(c);
 		x++;

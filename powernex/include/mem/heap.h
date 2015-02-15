@@ -2,7 +2,6 @@
 #define HEAP_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
 
 #define HEAP_START 0xD0000000
 #define HEAP_END   0xFFBFF000

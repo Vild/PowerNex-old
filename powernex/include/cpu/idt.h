@@ -2,7 +2,6 @@
 #define IDT_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
 
 #define IRQ(x) (32+x)
 

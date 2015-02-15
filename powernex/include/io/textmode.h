@@ -2,9 +2,10 @@
 #define TEXTMODE_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
 
-#define makecolor(f, b) ((b << 4) | (f & 0xF))
+#define makecolor(f, b) (((b&0xF) << 4) | (f & 0xF))
+
+#define DEFAULT_COLOR makecolor(COLOR_CYAN, COLOR_BLACK)
 
 enum textmode_color {
 	COLOR_BLACK = 0,
@@ -23,6 +24,7 @@ enum textmode_color {
 	COLOR_LIGHT_MAGENTA = 13,
 	COLOR_LIGHT_BROWN = 14,
 	COLOR_WHITE = 15,
+	MAX_COLOR_NUMS
 };
 
 void textmode_clear();

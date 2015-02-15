@@ -5,7 +5,6 @@
 #include <powernex/io/textmode.h>
 #include <powernex/cpu/scheduler.h>
 
-static thread_t * current_thread = NULL; //used in ASM
 static uint32_t thread_counter;
 
 static void thread_exit();
@@ -15,7 +14,6 @@ thread_t * thread_init() {
 	memset(thread, 0, sizeof(thread_t));
 	thread->id = thread_counter++;
 
-	current_thread = thread;
 	return thread;
 }
 

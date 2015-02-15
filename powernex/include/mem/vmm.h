@@ -2,8 +2,6 @@
 #define VMM_H_
 
 #include <powernex/powernex.h>
-#include <stdint.h>
-#include <stdbool.h>
 
 #define PAGE_PRESENT 0x1
 #define PAGE_WRITE 0x2
