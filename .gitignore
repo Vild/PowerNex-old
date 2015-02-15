@@ -10,3 +10,4 @@ bochsout.txt
 *.iso
 TAGS
 cscope.files
+.emacs.desktop

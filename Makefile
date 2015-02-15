@@ -10,7 +10,7 @@ LD	:= $(PREFIX)ld
 
 ARFLAGS := rcs
 ASFLAGS := -march=generic32 --32 --nocompress-debug-sections -D -g --gdwarf-2
-CFLAGS  := -std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-mmx -mno-3dnow -Iincludes -Wall -Werror -pedantic
+CFLAGS  := -std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-mmx -mno-3dnow -Iincludes -Wall -Werror -pedantic -fsigned-bitfields -funsigned-bitfields
 LDFLAGS :=
 # Global ARFLAGS.
 

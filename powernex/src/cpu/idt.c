@@ -107,8 +107,10 @@ static void idt_setGate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
 void idt_handler(registers_t * regs) {
 	if (interruptHandlers[regs->int_no])
 		interruptHandlers[regs->int_no](regs);
-	else
+	else {
+		
 		panic("Unhandled interrupt: %d\n", regs->int_no);
+	}
 }
 
 void irq_handler(registers_t * regs) {

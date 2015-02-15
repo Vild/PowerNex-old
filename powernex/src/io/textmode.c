@@ -82,6 +82,7 @@ static void kprintf_(const char * str, va_list va) {
 				break;
 			case 'p':
 				kputs(utoa((uint32_t)va_arg(va, void *), buf, 16));
+				break;
 			case 'b':
 				kputs(itoa(va_arg(va, int), buf, 2));
 				break;

@@ -21,7 +21,7 @@ typedef struct {
 
 typedef struct {
 	uint32_t ds;
-	uint32_t edi, esi, ebp, unless_value, ebx, edx, ecx, eax;
+	uint32_t edi, esi, ebp, useless_value, ebx, edx, ecx, eax;
 	uint32_t int_no, err_code;
 	uint32_t eip, cs, eflags, esp, ss;
 } registers_t;

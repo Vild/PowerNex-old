@@ -2,6 +2,9 @@
 #define POWERNEX_H_
 
 #define UNUSED __attribute__((unused))
+#include <stddef.h>
+#include <stdbool.h>
+
 
 void panic(const char * str, ...); //Located in textmode.c
 

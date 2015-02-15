@@ -2,10 +2,13 @@
 #include <powernex/cpu/idt.h>
 #include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
+#include <powernex/cpu/scheduler.h>
+
 
 uint32_t tick = 0;
 static void pit_callback(UNUSED registers_t * regs) {
 	tick++;
+	scheduler_schedule();
 	//kprintf("\rTick: %d", tick);
 }
 

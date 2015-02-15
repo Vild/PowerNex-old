@@ -37,19 +37,14 @@ void vmm_init() {
 
 	vmm_switchPageDirectory(pd);
 	
-	DEBUG();
 	__asm__ volatile("mov %%cr0, %0" : "=r"(cr0));
 	cr0 |= 0x80000000;	
 	__asm__ volatile("mov %0, %%cr0" : : "r"(cr0));
-
 	
-	DEBUG();
 	uint32_t pt_idx = PAGE_DIR_IDX((PMM_STACK_ADDR >> 12));
 	pageDirectory[pt_idx] = pmm_allocPage() | PAGE_PRESENT | PAGE_WRITE;
 	memset((void *)pageTables[pt_idx*1024], 0, 0x1000);
 
-
-	DEBUG();
 	pmm_pagingActive = true;
 }
 
