@@ -18,4 +18,6 @@ thread_t * thread_init();
 thread_t * thread_create(thread_func_f fn, void * arg, uint32_t * stack);
 void thread_switch(thread_list_t * next);
 
+void thread_sleep(uint32_t time);
+
 #endif

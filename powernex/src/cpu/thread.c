@@ -4,6 +4,7 @@
 #include <powernex/string.h>
 #include <powernex/io/textmode.h>
 #include <powernex/cpu/scheduler.h>
+#include <powernex/cpu/pit.h>
 
 static uint32_t thread_counter;
 
@@ -39,4 +40,9 @@ static void thread_exit() {
 
 	kprintf("Thread exited with value %d\n", val);
 	while (true);
+}
+
+void thread_sleep(uint32_t time) {
+	uint32_t tmp = pit_tick+time;
+	while (pit_tick < tmp);
 }

@@ -26,6 +26,12 @@ int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
 	else
 		kprintf("ERROR:\tUNKNOWN BOOTLOADER\n");
 
+	kputcolor(makecolor(COLOR_RED, COLOR_GREEN));
+	while(true) {
+		kprintf("a");
+		thread_sleep(1000);
+	}
+	
 	while(true);
 	
 	return 0xDEADBEEF;
@@ -33,11 +39,11 @@ int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
 
 static void welcome() {
 	const char * line1 = "Welcome to PowerNex!";
-	const char * line2 = "Created by: Dan Printzell";
+	const char * line2 = "POWER for the NEXt generation";
 	const char * line3 = "Version: ";
 	const char * line3_ = build_git_version;
-	const char * line4 = "License: MIT? maybe";
-	const char * line5 = "";
+	const char * line4 = "Created by: Dan Printzell";
+	const char * line5 = "License: MIT? maybe";
 
 	
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
@@ -85,5 +91,5 @@ static void setup(multiboot_info_t * multiboot) {
 	scheduler_init(thread_init());
 
 	//Hardware
-	pit_init(20);
+	pit_init(100/*HZ*/);
 }
