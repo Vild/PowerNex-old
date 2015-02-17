@@ -11,4 +11,4 @@ powernex_PROGRAM := powernex.krl
 powernex.krl_LIBRARIES :=
 
 # Sources for the executable 'powernex' (without headers)
-powernex.krl_SOURCES := $(shell cd powernex/src && find -type f -name '*.c' -o -name '*.S' | sed 's/\.\///g')
+powernex.krl_SOURCES := text/font.c $(shell cd powernex/src && find -type f -name '*.c' -o -name '*.S' | sed 's/\.\///g')

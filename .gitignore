@@ -13,3 +13,6 @@ cscope.files
 .emacs.desktop
 buildinfo.c
 includes/buildinfo.h
+utils/bdf2c
+powernex/include/text/font.h
+powernex/src/text/font.h

@@ -33,8 +33,6 @@ powernex.iso: bin/powernex.krl
 bochs: bochsrc.txt powernex.iso
 	bochs -f bochsrc.txt -q || true
 
-
-
 ###################################################################
 # What follows are several templates (think "functions"), which are
 # later instantiated for each registered module ($(1) being the
@@ -46,6 +44,15 @@ FORCE:
 
 buildinfo.c: FORCE
 	./buildinfo.sh
+
+
+utils/bdf2c: utils/bdf2c.c
+	gcc -O3 -Werror -W -Wall -o $@ $^
+
+powernex/src/text/font.c: utils/bdf2c
+	@mkdir -p powernex/{src,include}/text || true
+	@utils/bdf2c -C powernex/include/text/font.h -b < utils/u_vga16.bdf > $@
+	@sed -i 's/\#include \"font\.h\"/\#include \<powernex\/text\/font\.h\>/g' $@
 
 
 # Including a module's build.mk
