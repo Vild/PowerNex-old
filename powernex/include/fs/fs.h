@@ -14,7 +14,7 @@ enum {
 };
 
 typedef struct fs_node fs_node_t;
-typedef struct fs_dirent fs_dirent_t
+typedef struct fs_dirent fs_dirent_t;
 
 typedef uint32_t (*fs_read_f)(fs_node_t * node, uint32_t offset, uint32_t size, uint8_t * buffer);
 typedef uint32_t (*fs_write_f)(fs_node_t * node, uint32_t offset, uint32_t size, uint8_t * buffer);
