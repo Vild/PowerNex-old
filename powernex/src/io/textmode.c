@@ -154,7 +154,7 @@ void panic(const char * str, ...) {
 	va_start(va, str);
 	kprintf_(str, va);
 	va_end(va);
-	kprintf("####  STACK TRACE ####\n");
+	kprintf("\n####  STACK TRACE ####\n");
 	elf_printStackTrace();
 	kprintf("######################\n");
 	while (1);

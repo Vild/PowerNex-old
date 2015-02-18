@@ -21,7 +21,7 @@ typedef uint32_t (*fs_write_f)(fs_node_t * node, uint32_t offset, uint32_t size,
 typedef void (*fs_open_f)(fs_node_t * node);
 typedef void (*fs_close_f)(fs_node_t * node);
 typedef fs_dirent_t * (*fs_readdir_f)(fs_node_t * node, uint32_t index);
-typedef fs_node_t * (*fs_finddir_f)(fs_node_t * node, char * name);
+typedef fs_node_t * (*fs_finddir_f)(fs_node_t * node, const char * name);
 
 struct fs_node {
 	char name[128];
@@ -55,6 +55,6 @@ uint32_t fs_write(fs_node_t * node, uint32_t offset, uint32_t size, uint8_t * bu
 void fs_open(fs_node_t * node);
 void fs_close(fs_node_t * node);
 fs_dirent_t * fs_readdir(fs_node_t * node, uint32_t index);
-fs_node_t * fs_finddir(fs_node_t * node, char * name);
+fs_node_t * fs_finddir(fs_node_t * node, const char * name);
 
 #endif

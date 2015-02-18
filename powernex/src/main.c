@@ -11,6 +11,8 @@
 #include <powernex/mem/heap.h>
 #include <powernex/mem/pmm.h>
 #include <powernex/mem/vmm.h>
+#include <powernex/fs/fs.h>
+#include <powernex/fs/initrd.h>
 
 static void setup(multiboot_info_t * multiboot);
 static void welcome();
@@ -26,11 +28,41 @@ int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
 	else
 		kprintf("ERROR:\tUNKNOWN BOOTLOADER\n");
 
-	kputcolor(makecolor(COLOR_RED, COLOR_GREEN));
+
+
+	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
+//	uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
+	fs_root = initrd_init(initrd_location);
+
+	
+// list the contents of	
+	int i = 0;
+	fs_dirent_t * node = NULL;
+	while ((node = fs_readdir(fs_root, i)) != NULL) {
+		kprintf("Found file %s", node->name);
+		fs_node_t * fsnode = fs_finddir(fs_root, node->name);
+
+		if ((fsnode->flags & FS_DIRECTORY) == FS_DIRECTORY)
+			kprintf("\n\t(directory)\n");
+		else {
+			kprintf("\n\t contents: \"");
+			char buf[256];
+			uint32_t sz = fs_read(fsnode, 0, 256, (uint8_t *)buf);
+			for (uint32_t j = 0; j < sz; j++)
+				kputc(buf[j]);
+
+			kprintf("\"\n");
+		}
+		i++;
+	} 
+
+
+	
+/*	kputcolor(makecolor(COLOR_RED, COLOR_GREEN));
 	while(true) {
 		kprintf("a");
 		thread_sleep(1000);
-	}
+	}*/
 	
 	while(true);
 	
@@ -92,4 +124,7 @@ static void setup(multiboot_info_t * multiboot) {
 
 	//Hardware
 	pit_init(100/*HZ*/);
+
+	if (multiboot->mods_count == 0)
+		panic("No initrd defined!");
 }

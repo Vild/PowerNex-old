@@ -33,7 +33,7 @@ fs_dirent_t * fs_readdir(fs_node_t * node, uint32_t index) {
 		return NULL;
 }
 
-fs_node_t * fs_finddir(fs_node_t * node, char * name) {
+fs_node_t * fs_finddir(fs_node_t * node, const char * name) {
 	if (node->finddir && (node->flags & FS_DIRECTORY) == FS_DIRECTORY)
 		return node->finddir(node, name);
 	else

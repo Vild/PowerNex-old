@@ -14,6 +14,19 @@ CFLAGS  := -std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-m
 LDFLAGS :=
 # Global ARFLAGS.
 
+
+FONT_TOOL			:= utils/bdf2c
+FONT_TOOL_SRC := $(FONT_TOOL).c
+FONT_SRC			:= powernex/src/text/font.c
+FONT_H				:= powernex/include/text/font.h
+
+MKINITRD_TOOL := utils/mkinitrd
+MKINITRD_SRC  := $(MKINITRD_TOOL).c
+INITRD        := iso/boot/initrd.img
+INITRD_DIR    := initrd
+
+POWERNEX      := iso/boot/powernex.krl
+
 .PHONY: clean mrproper $(MODULES) bochs
 
 # Add whatever should be your default / global target.
@@ -26,9 +39,11 @@ powernex: bin/powernex.krl
 
 iso: powernex.iso
 
-powernex.iso: bin/powernex.krl
-	cp bin/powernex.krl iso/boot
+powernex.iso: $(POWERNEX) $(INITRD)
 	grub-mkrescue -d /usr/lib/grub/i386-pc -o powernex.iso iso
+
+$(POWERNEX): bin/powernex.krl
+	cp $< $@
 
 bochs: bochsrc.txt powernex.iso
 	bochs -f bochsrc.txt -q || true
@@ -45,15 +60,22 @@ FORCE:
 buildinfo.c: FORCE
 	./buildinfo.sh
 
+$(FONT_TOOL): $(FONT_TOOL_SRC)
+	@echo TOOL: Compiling $<
+	@gcc -O3 -Werror -W -Wall -o $@ $^
 
-utils/bdf2c: utils/bdf2c.c
-	gcc -O3 -Werror -W -Wall -o $@ $^
-
-powernex/src/text/font.c: utils/bdf2c
+$(FONT_SRC): $(FONT_TOOL)
 	@mkdir -p powernex/{src,include}/text || true
-	@utils/bdf2c -C powernex/include/text/font.h -b < utils/u_vga16.bdf > $@
+	@echo Generating font files: $(FONT_SRC) $(FONT_H)
+	@utils/bdf2c -C $(FONT_H) -b < utils/u_vga16.bdf > $@
 	@sed -i 's/\#include \"font\.h\"/\#include \<powernex\/text\/font\.h\>/g' $@
 
+$(MKINITRD_TOOL): $(MKINITRD_SRC) FORCE
+	@echo TOOL: Compiling $<
+	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -g -o $@ $(MKINITRD_SRC) 
+
+$(INITRD): $(MKINITRD_TOOL) $(shell find $(INITRD_DIR))
+	$(MKINITRD_TOOL) -o $@ -i $(INITRD_DIR)
 
 # Including a module's build.mk
 define MK_template
@@ -117,9 +139,12 @@ $(foreach module,$(MODULES),$(eval $(call INCLUDE_template,$(module))))
 
 clean:
 	$(RM) -rf $(foreach mod,$(MODULES),$(mod)/obj/) | true
-	$(RM) includes/* bin/* lib/* | true
+	$(RM) -rf includes/* bin/* lib/* $(FONT_SRC) $(FONT_H) | true
 
 kclean:
 	$(RM) -rf powernex/obj/ | true
+
+cclean: clean
+	$(RM) -rf $(FONT_TOOL) $(MKINITRD_TOOL) | true
 
 #$(foreach mod,$(MODULES),$(mod)/obj/*.d)
