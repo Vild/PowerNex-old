@@ -72,7 +72,7 @@ $(FONT_SRC): $(FONT_TOOL)
 
 $(MKINITRD_TOOL): $(MKINITRD_SRC) FORCE
 	@echo TOOL: Compiling $<
-	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -g -o $@ $(MKINITRD_SRC) 
+	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $(MKINITRD_SRC) 
 
 $(INITRD): $(MKINITRD_TOOL) $(shell find $(INITRD_DIR))
 	$(MKINITRD_TOOL) -o $@ -i $(INITRD_DIR)

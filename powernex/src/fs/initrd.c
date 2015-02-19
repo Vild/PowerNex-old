@@ -77,7 +77,7 @@ fs_node_t * initrd_init(uint32_t location) {
 		strcpy(root_nodes[i].name, file_headers[i].name);
 		root_nodes[i].length = file_headers[i].length;
 		root_nodes[i].inode = i;
-		root_nodes[i].flags = FS_FILE;
+		root_nodes[i].flags = file_headers[i].type;
 		root_nodes[i].read = &initrd_read;
 	}
 	return initrd_root;

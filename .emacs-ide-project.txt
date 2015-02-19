@@ -1,0 +1,41 @@
+FS design
+=========
+fs_node
+ Properties
+ - Root DIR
+ Functions
+
+DIR
+ Properties
+ - Name
+ - Permissions
+ - fs_node owner
+ Functions
+ - Mount to other DIR
+ - List all files in current mount & in current dir
+ - Add FILE
+ - Remove FILE
+
+FILE
+ Properties
+ - Name
+ - Permissions
+ - Length
+ - fs_node owner
+ Functions
+ - Open
+ - Close
+ - Write
+ - Read
+
+SYMLINK
+ Properties
+ - Name
+ - Permissions
+ - FILE
+ Functions
+ 
+
+TODO
+====
+- Add lists

@@ -6,13 +6,18 @@
 #include <getopt.h>
 #include <stdlib.h>
 
+#define MAX_INITRD_FILES 128
+
 char * output = "initrd.img";
 char * input = "initrd";
 struct {
 	char name[128];
 	char path[128];
-} input_files[64];
+	uint32_t type;
+	uint32_t parent;
+} input_files[128];
 int file_index = 0;
+int32_t currentParent = -1;
 
 static __attribute__((noreturn)) void showHelp() {
 	printf("mkinitrd [-h] [-o initrd.img] [-i initrd]");
@@ -53,12 +58,13 @@ static void handleArgs(int argc, char ** argv) {
 
 
 
-static int one (UNUSED const struct dirent *unused) {
+static int one(UNUSED const struct dirent *unused) {
   return 1;
 }
 
 static void findFiles(char * dir, char * dirname) {
 	char buf[128];
+	char buf2[128];
   struct dirent **eps;
   int n;
 
@@ -67,15 +73,31 @@ static void findFiles(char * dir, char * dirname) {
 		for (int i = 0; i < n; ++i) {
 			if (!strcmp(eps[i]->d_name, ".") || !strcmp(eps[i]->d_name, ".."))
 				continue;
-			snprintf(buf, 128, "%s%s", dirname, eps[i]->d_name);
+			printf("dir: %s, dirname: %s, name: %s\n", dir, dirname, eps[i]->d_name);
+			snprintf(buf, 128, "%s/%s", dir, eps[i]->d_name);
+			
 			if (eps[i]->d_type == DT_REG) {
-				strncpy(input_files[file_index].name, eps[i]->d_name, 128);
-
-				snprintf(input_files[file_index].path, 128, "%s/%s", input, buf);
+				snprintf(input_files[file_index].name, 128, "%s%s", dirname, eps[i]->d_name);
+				snprintf(input_files[file_index].path, 128, "%s", buf);
+				printf("Found File: %s\n", input_files[file_index].path);
+				
+				input_files[file_index].type = FS_FILE;
+				input_files[file_index].parent = currentParent;
 				file_index++;
 			} else if (eps[i]->d_type == DT_DIR) {
-				printf("D: %s SKIPPING!\n", buf);
-				//handleDir(dir, esp[i]->d_name);
+				strncpy(input_files[file_index].name, eps[i]->d_name, 128);
+				input_files[file_index].path[0] = '\0';
+				printf("Found Directory: %s\n", eps[i]->d_name);
+				
+				input_files[file_index].type = FS_DIRECTORY;
+				input_files[file_index].parent = currentParent;
+				
+				currentParent = file_index++;
+				
+				snprintf(buf, 128, "%s/%s", dir, eps[i]->d_name);
+				snprintf(buf2, 128, "%s%s/", dirname, eps[i]->d_name);
+				findFiles(buf, buf2);
+				currentParent = -1;
 			}
 		}
   } else
@@ -102,13 +124,18 @@ int main(int argc, char ** argv) {
 		printf("Writing file: %s->%s at 0x%x\n", input_files[i].path, input_files[i].name, off);
 		
 		fileHeader[i].magic = 0xBF;
+		fileHeader[i].type = input_files[i].type;
 		strncpy(fileHeader[i].name, input_files[i].name, 128);
 		fileHeader[i].offset = off;
-		FILE * tfp = fopen(input_files[i].path, "rb");
-		fseek(tfp, 0, SEEK_END);
-		fileHeader[i].length = ftell(tfp);
-		off += fileHeader[i].length;
-		fclose(tfp);
+		fileHeader[i].parent = input_files[i].parent;
+		if (input_files[i].type == FS_FILE) {
+			FILE * tfp = fopen(input_files[i].path, "rb");
+			fseek(tfp, 0, SEEK_END);
+			fileHeader[i].length = ftell(tfp);
+			off += fileHeader[i].length;
+			fclose(tfp);
+		} else
+			fileHeader[i].length = 0;
 	}
 
 	FILE * fp = fopen(output, "wb");
@@ -117,6 +144,9 @@ int main(int argc, char ** argv) {
 	fwrite(&fileHeader, sizeof(initrd_fileHeader_t), file_index, fp);
 
 	for (int i = 0; i < file_index; i++) {
+		if (input_files[i].type != FS_FILE)
+			continue;
+		
 		FILE * tfp = fopen(input_files[i].path, "rb");
 		uint8_t * buf = malloc(fileHeader[i].length);
 

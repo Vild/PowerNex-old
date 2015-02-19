@@ -13,6 +13,8 @@ typedef struct initrd_fileHeader {
 	char name[128];
 	uint32_t offset;
 	uint32_t length;
+	uint32_t type;
+	int32_t parent;
 } initrd_fileHeader_t;
 
 fs_node_t * initrd_init(uint32_t location);
