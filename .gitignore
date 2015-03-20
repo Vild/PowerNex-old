@@ -18,3 +18,4 @@ powernex/include/text/font.h
 powernex/src/text/font.h
 initrd.img
 mkinitrd
+win-bochs
