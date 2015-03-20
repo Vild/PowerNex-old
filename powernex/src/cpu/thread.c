@@ -22,16 +22,16 @@ thread_t * thread_create(thread_func_f fn, void * arg, uint32_t * stack) {
 	thread_t * thread = kmalloc(sizeof(thread_t));
 	memset(thread, 0, sizeof(thread_t));
 	thread->id = thread_counter++;
-	DEBUG();
-	*--stack = (uint32_t)arg;	DEBUG();	
-	*--stack = (uint32_t)&thread_exit;	DEBUG();
-	*--stack = (uint32_t)fn;	DEBUG();
-	DEBUG();
+	
+	*--stack = (uint32_t)arg;
+	*--stack = (uint32_t)&thread_exit;
+	*--stack = (uint32_t)fn;
+	
 	thread->esp = (uint32_t)stack;
 	thread->ebp = 0;
 	thread->eflags = 0x200; // Interrupts enabled, TODO: lookup real names
 	scheduler_isReady(thread);
-	DEBUG();
+	
 	return thread;
 }
 

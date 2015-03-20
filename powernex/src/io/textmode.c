@@ -1,6 +1,5 @@
 #include <powernex/io/textmode.h>
 
-#include <stdarg.h>
 #include <string.h>
 
 #include <powernex/elf.h>
@@ -21,7 +20,6 @@ static int y = 0;
 static char * itoa(int32_t value, char* result, int base);
 static char * utoa(uint32_t value, char* result, int base);
 static void textmode_updateCursor();
-static void kprintf_(const char * str, va_list va);
 static inline void kputs_(const char * str);
 static inline void kputc_(char str);
 
@@ -37,11 +35,11 @@ void textmode_clear() {
 void kprintf(const char * str, ...) {
 	va_list va;
 	va_start(va, str);
-	kprintf_(str, va);
+	kprintf_va(str, va);
 	va_end(va);
 }
 
-static void kprintf_(const char * str, va_list va) {
+void kprintf_va(const char * str, va_list va) {
 	char buf[64] = "";
 	while (*str) {
 		if (*str == '%') {
@@ -123,6 +121,7 @@ static inline void kputc_(char c) {
 		x--;
 		if (x < 0)
 			x = 0;
+		vidmem[(y * WIDTH) + x] = makechar(' ');
 	} else if (c == '\t')
 		x = (x+TAB_SIZE) & ~TAB_SIZE; //TODO: Fix
 	else {
@@ -152,7 +151,7 @@ void panic(const char * str, ...) {
 	kprintf("#### SYSTEM PANIC ####\n");
 	va_list va;
 	va_start(va, str);
-	kprintf_(str, va);
+	kprintf_va(str, va);
 	va_end(va);
 	kprintf("\n####  STACK TRACE ####\n");
 	elf_printStackTrace();

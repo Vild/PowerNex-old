@@ -40,7 +40,7 @@ struct fs_node {
 	fs_readdir_f readdir;
 	fs_finddir_f finddir;
 
-	fs_node_t * ptr;
+	fs_node_t * ptr; // Used by mountpoints and symlinks.
 };
 
 struct fs_dirent {

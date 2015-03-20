@@ -3,6 +3,8 @@
 
 #include <powernex/powernex.h>
 
+#include <stdarg.h>
+
 #define makecolor(f, b) (((b&0xF) << 4) | (f & 0xF))
 
 #define DEFAULT_COLOR makecolor(COLOR_CYAN, COLOR_BLACK)
@@ -29,6 +31,7 @@ enum textmode_color {
 
 void textmode_clear();
 void kprintf(const char * str, ...);
+void kprintf_va(const char * str, va_list va);
 void kputc(char c);
 void kputs(const char * str);
 void kputcolor(uint8_t color);

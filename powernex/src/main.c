@@ -8,70 +8,119 @@
 #include <powernex/cpu/thread.h>
 #include <powernex/cpu/scheduler.h>
 #include <powernex/io/port.h>
+#include <powernex/io/keyboard.h>
 #include <powernex/mem/heap.h>
 #include <powernex/mem/pmm.h>
 #include <powernex/mem/vmm.h>
 #include <powernex/fs/fs.h>
 #include <powernex/fs/initrd.h>
+#include <powernex/string.h>
+#include <stdarg.h>
 
+static void step(const char * msg, ...);
 static void setup(multiboot_info_t * multiboot);
 static void welcome();
 
-int kmain(int multiboot_magic, multiboot_info_t * multiboot) {
+int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	setup(multiboot);
-
+	kputc('\n');
+	
 	welcome();
-	
-	kprintf("Welcome to PowerNex!\n");
-	if (multiboot_magic == MULTIBOOT_BOOTLOADER_MAGIC)
-		kprintf("You are using '%s' as your bootloader.\n", multiboot->boot_loader_name);
-	else
-		kprintf("ERROR:\tUNKNOWN BOOTLOADER\n");
+	kputc('\n');
 
-
-
-	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
-//	uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
-	fs_root = initrd_init(initrd_location);
-
-	
-// list the contents of	
-	int i = 0;
-	fs_dirent_t * node = NULL;
-	while ((node = fs_readdir(fs_root, i)) != NULL) {
-		kprintf("Found file %s", node->name);
-		fs_node_t * fsnode = fs_finddir(fs_root, node->name);
-
-		if ((fsnode->flags & FS_DIRECTORY) == FS_DIRECTORY)
-			kprintf("\n\t(directory)\n");
-		else {
-			kprintf("\n\t contents: \"");
-			char buf[256];
-			uint32_t sz = fs_read(fsnode, 0, 256, (uint8_t *)buf);
-			for (uint32_t j = 0; j < sz; j++)
-				kputc(buf[j]);
-
-			kprintf("\"\n");
+	char user[64];
+	char pass[64];
+	uint32_t count;
+	while(true) { //Login
+		kprintf("PowerNex login: ");
+		user[0] = pass[0] = count = 0;
+		while (true) { //Readline user
+			char c = kb_getc();
+			if (c) {
+				if (c == '\n') {
+					kputc('\n');
+					break;
+				} else if (c == '\b') {
+					if (count > 0) {
+						--count;
+						user[count] = '\0';
+						kputc('\b');
+					}
+				} else {
+					kputc(c);
+					if (count < sizeof(user) - 1)
+						user[count++] = c;
+				}
+			}
 		}
-		i++;
-	} 
-
-
+		user[count] = 0;
+		count = 0;
+		kprintf("Password: ");
+		while (true) { //Readline pass
+			char c = kb_getc();
+			if (c) {
+				if (c == '\n') {
+					kputc('\n');
+					break;
+				} else if (c == '\b') {
+					if (count > 0) {
+						--count;
+						pass[count] = '\0';
+						kputc('\b');
+					}
+				} else {
+					kputc('*'); //No echo on password
+				
+					if (count < sizeof(pass) - 1)
+						pass[count++] = c;
+				}
+			}
+		}
+		pass[count] = 0;
+		if (!strcmp(user, "root") && !strcmp(pass, "root"))
+			break;
+		
+		kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
+		kprintf("Sorry, try again.\n\n");
+		kputcolor(DEFAULT_COLOR);
+	}
 	
-/*	kputcolor(makecolor(COLOR_RED, COLOR_GREEN));
-	while(true) {
-		kprintf("a");
-		thread_sleep(1000);
-	}*/
-	
-	while(true);
+	kputc('\n');
+
+	while (true) {
+		kprintf("root@PowerNex# ");
+		while (true) {
+			char c = kb_getc();
+			if (c)
+				kputc(c);
+			if (c == '\n')
+				break;
+		}
+		kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
+		kprintf("NOT IMPLEMENTED YET\n");
+		kputcolor(DEFAULT_COLOR);
+	}
 	
 	return 0xDEADBEEF;
 }
 
+static void step(const char * str, ...) {
+	kputc('[');
+	kputcolor(makecolor(COLOR_MAGENTA, COLOR_BLACK));
+	kputc('*');
+	kputcolor(DEFAULT_COLOR);
+	kputc(']');
+	kputc(' ');
+	va_list va;
+	va_start(va, str);
+	kprintf_va(str, va);
+	va_end(va);
+	kputc('\n');
+}
+
 static void welcome() {
 	const char * line1 = "Welcome to PowerNex!";
-	const char * line2 = "POWER for the NEXt generation";
+	const char * line2 = "Power for the Next generation";
 	const char * line3 = "Version: ";
 	const char * line3_ = build_git_version;
 	const char * line4 = "Created by: Dan Printzell";
@@ -104,27 +153,47 @@ static void setup(multiboot_info_t * multiboot) {
 	textmode_clear(); // Also initalizes textmode
 	
 	//GDT
+	step("Initializing GDT...");
 	gdt_init();
+	step("Initializing IDT...");
 	idt_init();
 
-	//Memory
+	//Memory	
+	step("Initializing PMM with %d MB lower, %d MB upper...", multiboot->mem_lower, multiboot->mem_upper);
 	pmm_init(multiboot->mem_upper);
+	step("Initializing VMM...");
 	vmm_init();
+	step("Initializing Heap...");
 	heap_init();
+	
+	step("Initializing memory...");
 	pmm_setUp(multiboot);
 
 	//Debuging
+	step("Initializing Backtrace...");
 	elf_init(&(multiboot->u.elf_sec));
 
 	//Exceptions
+	step("Initializing enabling Exceptions...");
 	__asm__ volatile("sti");
 
 	//Multithreading
+	step("Initializing Scheduler...");
 	scheduler_init(thread_init());
 
 	//Hardware
+	step("Initializing PIT with %d HZ...", 100);
 	pit_init(100/*HZ*/);
 
+	//Register keyboard
+	step("Initializing Keyboard driver...");
+	kb_init();
+
+	step("Initializing Initrd...");
 	if (multiboot->mods_count == 0)
-		panic("No initrd defined!");
+		panic("No initrd defined in boot.cfg!");
+	
+	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
+  // uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
+	fs_root = initrd_init(initrd_location);
 }
