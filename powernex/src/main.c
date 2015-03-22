@@ -20,6 +20,7 @@
 static void step(const char * msg, ...);
 static void setup(multiboot_info_t * multiboot);
 static void welcome();
+static char * readline(int size, char echochar);
 
 int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	setup(multiboot);
@@ -28,56 +29,19 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	welcome();
 	kputc('\n');
 
-	char user[64];
-	char pass[64];
-	uint32_t count;
+	char * user;
+	char * pass;
 	while(true) { //Login
 		kprintf("PowerNex login: ");
-		user[0] = pass[0] = count = 0;
-		while (true) { //Readline user
-			char c = kb_getc();
-			if (c) {
-				if (c == '\n') {
-					kputc('\n');
-					break;
-				} else if (c == '\b') {
-					if (count > 0) {
-						--count;
-						user[count] = '\0';
-						kputc('\b');
-					}
-				} else {
-					kputc(c);
-					if (count < sizeof(user) - 1)
-						user[count++] = c;
-				}
-			}
-		}
-		user[count] = 0;
-		count = 0;
+		user = readline(64, 0);
 		kprintf("Password: ");
-		while (true) { //Readline pass
-			char c = kb_getc();
-			if (c) {
-				if (c == '\n') {
-					kputc('\n');
-					break;
-				} else if (c == '\b') {
-					if (count > 0) {
-						--count;
-						pass[count] = '\0';
-						kputc('\b');
-					}
-				} else {
-					kputc('*'); //No echo on password
-				
-					if (count < sizeof(pass) - 1)
-						pass[count++] = c;
-				}
-			}
-		}
-		pass[count] = 0;
-		if (!strcmp(user, "root") && !strcmp(pass, "root"))
+		pass = readline(64, '*');
+		bool success = (!strcmp(user, "root") && !strcmp(pass, "root"));
+
+		kfree(user);
+		kfree(pass);
+
+		if (success)
 			break;
 		
 		kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
@@ -159,7 +123,7 @@ static void setup(multiboot_info_t * multiboot) {
 	idt_init();
 
 	//Memory	
-	step("Initializing PMM with %d MB lower, %d MB upper...", multiboot->mem_lower, multiboot->mem_upper);
+	step("Initializing PMM with %d KB lower, %d MB upper...", multiboot->mem_lower, multiboot->mem_upper/1024);
 	pmm_init(multiboot->mem_upper);
 	step("Initializing VMM...");
 	vmm_init();
@@ -196,4 +160,34 @@ static void setup(multiboot_info_t * multiboot) {
 	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
   // uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
 	fs_root = initrd_init(initrd_location);
+}
+
+
+static char * readline(int size, char echoChar) {
+	char * str = kmalloc(size);
+	int count = 0;
+	while (true) { //Readline user
+		char c = kb_getc();
+		if (c) {
+			if (c == '\n') {
+				kputc('\n');
+				break;
+			} else if (c == '\b') {
+				if (count > 0) {
+					--count;
+					str[count] = '\0';
+					kputc('\b');
+				}
+			} else {
+				if (echoChar)
+					kputc(echoChar);
+				else
+					kputc(c);
+				if (count < size - 1)
+					str[count++] = c;
+			}
+		}
+	}
+  str[count++] = '\0';
+  return str;
 }
