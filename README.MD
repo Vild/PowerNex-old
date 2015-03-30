@@ -10,3 +10,6 @@ Authors
 -------
 Dan "Wild" Printzell
 
+License
+-------
+Mozilla Public License, version 2.0

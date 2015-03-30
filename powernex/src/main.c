@@ -88,7 +88,7 @@ static void welcome() {
 	const char * line3 = "Version: ";
 	const char * line3_ = build_git_version;
 	const char * line4 = "Created by: Dan Printzell";
-	const char * line5 = "License: MIT? maybe";
+	const char * line5 = "License: Mozilla Public License, version 2.0";
 
 	
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
