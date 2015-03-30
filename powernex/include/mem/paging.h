@@ -31,6 +31,6 @@ paging_page_t * paging_getPage(uint32_t address, bool make, paging_directory_t *
 
 void frameAlloc(paging_page_t * page, bool rw, bool user);
 
-//paging_directory_t * paging_cloneDirectory(paging_directory_t * directory);
+paging_directory_t * paging_cloneDirectory(paging_directory_t * directory);
 
 #endif

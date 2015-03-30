@@ -28,17 +28,6 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	welcome();
 	kputc('\n');
 
-	void * b = kmalloc(8);
-	void * c = kmalloc(8);
-	kprintf("B: 0x%X, C: 0x%X ", b, c);
-
-	kfree(c);
-	kfree(b);
-	void * d = kmalloc(12);
-	kprintf(", D: 0x%X\n", d);
-	kfree(d);
-
-	
 	char * user;
 	char * pass;
 	while(true) { //Login

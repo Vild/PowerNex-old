@@ -14,10 +14,6 @@ static void chunk_split(heap_header_t * chunk, uint32_t len);
 static void chunk_glue(heap_header_t * chunk);
 
 heap_t * heap_create(uint32_t start, uint32_t end, uint32_t max, bool rw, bool user) {
-	kprintf("heap_create(0x%X, 0x%X, 0x%X, %s, %s)\n",
-					start, end, max,
-					rw ? "true":"false",
-					user ? "true": "false");
 	heap_t * heap = (heap_t *) kmalloc(sizeof(heap_t));
 	if (start % 0x1000)
 		return NULL;

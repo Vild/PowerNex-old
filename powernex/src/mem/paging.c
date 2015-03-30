@@ -19,7 +19,8 @@ static void frameSet(uint32_t address);
 //static bool frameTest(uint32_t address);
 static uint32_t frameFirst();
 //static void frameFree(paging_page_t * page);
-//static paging_table_t * cloneTable(paging_table_t * talbe, uint32_t * phys);
+static paging_table_t * cloneTable(paging_table_t * talbe, uint32_t * phys);
+void copyPagePhysical(uint32_t p1, uint32_t p2);
 
 extern void * placementAddress;
 extern void * kernelHeap;
@@ -53,9 +54,6 @@ void paging_init(multiboot_info_t * multiboot) {
 	paging_switchDirectory(kernelDirectory);
 
 	kernelHeap = heap_create(KHEAP_START, KHEAP_START+KHEAP_INITIAL_SIZE, 0xCFFFF000, false, false);
-	//currentDirectory = paging_cloneDirectory(kernelDirectory);
-
-//	paging_switchDirectory(currentDirectory);
 }
 
 void paging_switchDirectory(paging_directory_t * directory) {
@@ -148,7 +146,7 @@ void frameAlloc(paging_page_t * page, bool rw, bool user) {
 	page->frame = 0x0;
 }*/
 
-/*
+
 static paging_table_t * cloneTable(paging_table_t * src, uint32_t * phys) {
 	paging_table_t * table = (paging_table_t *)kmalloc_ap(sizeof(paging_table_t), phys);
 	memset(table, 0, sizeof(paging_directory_t));
@@ -165,18 +163,21 @@ static paging_table_t * cloneTable(paging_table_t * src, uint32_t * phys) {
 		src->pages[i].accessed = table->pages[i].accessed;
 		src->pages[i].dirty    = table->pages[i].dirty;
 
-		copyPagePhysical(src->pages[i].frame * 0x1000, tables->pages[i].frame * 0x1000);
+		copyPagePhysical(src->pages[i].frame * 0x1000, table->pages[i].frame * 0x1000);
 	}
+	return table;
 }
 
 paging_directory_t * paging_cloneDirectory(paging_directory_t * src) {
 	uint32_t phys;
-	paging_directory_t * dir = (page_directory_t *)kmalloc_ap(sizeof(paging_directory_t), &phys);
+	paging_directory_t * dir = (paging_directory_t *)kmalloc_ap(sizeof(paging_directory_t), &phys);
 
 	memset(dir, 0, sizeof(paging_directory_t));
 
 	uint32_t offset = (uint32_t) dir->tablesPhysical - (uint32_t) dir;
 
+	dir->physicalAddress = (void *)(phys + offset);
+	
 	for (int i = 0; i < 1024; i++) {
 		if (!src->tables[i])
 			continue;
@@ -185,9 +186,9 @@ paging_directory_t * paging_cloneDirectory(paging_directory_t * src) {
 			dir->tables[i] = src->tables[i];
 			dir->tablesPhysical[i] = src->tablesPhysical[i];
 		} else {
-			dir->table[i] = cloneTable(src->tables[i], &phys);
-			dir->tablesPhysical[i] = phys | 0x07;
+			dir->tables[i] = cloneTable(src->tables[i], &phys);
+			dir->tablesPhysical[i] = (void *)(phys | 0x07);
 		}
 	}
 	return dir;
-	}*/
+}
