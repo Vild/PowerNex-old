@@ -10,8 +10,7 @@
 #include <powernex/io/port.h>
 #include <powernex/io/keyboard.h>
 #include <powernex/mem/heap.h>
-#include <powernex/mem/pmm.h>
-#include <powernex/mem/vmm.h>
+#include <powernex/mem/paging.h>
 #include <powernex/fs/fs.h>
 #include <powernex/fs/initrd.h>
 #include <powernex/string.h>
@@ -29,6 +28,17 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	welcome();
 	kputc('\n');
 
+	void * b = kmalloc(8);
+	void * c = kmalloc(8);
+	kprintf("B: 0x%X, C: 0x%X ", b, c);
+
+	kfree(c);
+	kfree(b);
+	void * d = kmalloc(12);
+	kprintf(", D: 0x%X\n", d);
+	kfree(d);
+
+	
 	char * user;
 	char * pass;
 	while(true) { //Login
@@ -50,6 +60,7 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	}
 	
 	kputc('\n');
+
 
 	while (true) {
 		kprintf("root@PowerNex# ");
@@ -123,15 +134,8 @@ static void setup(multiboot_info_t * multiboot) {
 	idt_init();
 
 	//Memory	
-	step("Initializing PMM with %d KB lower, %d MB upper...", multiboot->mem_lower, multiboot->mem_upper/1024);
-	pmm_init(multiboot->mem_upper);
-	step("Initializing VMM...");
-	vmm_init();
-	step("Initializing Heap...");
-	heap_init();
-	
-	step("Initializing memory...");
-	pmm_setUp(multiboot);
+	step("Initializing paging with %d MB...", (multiboot->mem_lower + multiboot->mem_upper)/1024);
+	paging_init(multiboot);
 
 	//Debuging
 	step("Initializing Backtrace...");
@@ -161,7 +165,6 @@ static void setup(multiboot_info_t * multiboot) {
   // uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
 	fs_root = initrd_init(initrd_location);
 }
-
 
 static char * readline(int size, char echoChar) {
 	char * str = kmalloc(size);

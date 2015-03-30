@@ -1,25 +1,69 @@
 #include <powernex/mem/heap.h>
-#include <powernex/mem/pmm.h>
-#include <powernex/mem/vmm.h>
+#include <powernex/mem/paging.h>
 
-uint32_t heap_max = HEAP_START;
-heap_header_t * heap_first = NULL;
+#include <powernex/io/textmode.h>
 
-static void chunk_alloc(uint32_t start, uint32_t len);
+extern void * end;
+extern paging_directory_t * kernelDirectory;
+
+void * placementAddress = &end;
+heap_t * kernelHeap = NULL;
+
+static void expand(heap_t * heap, uint32_t newSize);
 static void chunk_split(heap_header_t * chunk, uint32_t len);
 static void chunk_glue(heap_header_t * chunk);
-static void chunk_free(heap_header_t * chunk);
 
-void heap_init() {
+heap_t * heap_create(uint32_t start, uint32_t end, uint32_t max, bool rw, bool user) {
+	kprintf("heap_create(0x%X, 0x%X, 0x%X, %s, %s)\n",
+					start, end, max,
+					rw ? "true":"false",
+					user ? "true": "false");
+	heap_t * heap = (heap_t *) kmalloc(sizeof(heap_t));
+	if (start % 0x1000)
+		return NULL;
+	if (end % 0x1000)
+		return NULL;
+	
+	heap->startAddress = start;
+	heap->endAddress = start; //end;
+	heap->maxAddress = max;
+	heap->rw = rw;
+	heap->user = user;
 
+	expand(heap, end - start);
+	
+	heap_header_t * hole = (heap_header_t *) start;
+	hole->prev = hole->next = NULL;
+	hole->allocated = false;
+	hole->length = end - start;
+
+	heap->first = hole;
+	return heap;
 }
 
-void * kmalloc(uint32_t size) {
-	size += sizeof(heap_header_t);
+static void expand(heap_t * heap, uint32_t newSize) {
+	if (newSize & 0xFFFFF000) {
+		newSize &= 0xFFFFF000;
+		newSize += 0x1000;
+	}
 
-	heap_header_t * cur = heap_first;
-	heap_header_t * prev = NULL;
+	if (heap->startAddress + newSize > heap->maxAddress) {
+		panic("Out of heap space, heap: 0x%X", heap);
+	}
 
+	uint32_t oldSize = heap->endAddress - heap->startAddress;
+	for (uint32_t i = oldSize; i < newSize; i += 0x1000)
+		frameAlloc(paging_getPage(heap->startAddress + i, 1, kernelDirectory), heap->rw, heap->user);
+	
+	heap->endAddress = heap->startAddress+newSize;
+}
+							 
+void * alloc(uint32_t size, bool pageAlign, heap_t * heap) {
+	heap_header_t * cur = heap->first;
+	heap_header_t * prev = cur;	
+	if (!cur)
+		panic("Invalid heap @0x%X!", heap);
+	
 	while (cur) {
 		if (!cur->allocated && cur->length >= size) {
 			chunk_split(cur, size);
@@ -29,85 +73,104 @@ void * kmalloc(uint32_t size) {
 		prev = cur;
 		cur = cur->next;
 	}
-	uint32_t chunk_start;
-	if (prev)
-		chunk_start = (uint32_t)prev + prev->length;
-	else {
-		chunk_start = HEAP_START;
-		heap_first = (heap_header_t *)chunk_start;
+	
+	uint32_t loc = (uint32_t)prev + prev->length;
+	if (pageAlign && (loc+sizeof(heap_header_t)) & 0xFFFFFF00) {
+		loc &= 0xFFFFFF00;
+		loc += 0x100 - sizeof(heap_header_t);
 	}
-
-	chunk_alloc(chunk_start, size);
-
-	cur = (heap_header_t *)chunk_start;
-	cur->prev = prev;
-	cur->next = NULL;
-	cur->allocated = 1;
-	cur->length = size;
-
-	prev->next = cur;
-	return (void *)(chunk_start + sizeof(heap_header_t));
+	if (loc + sizeof(heap_header_t) + size > heap->endAddress) {
+		uint32_t oldLength = heap->endAddress - heap->startAddress;
+		expand(heap, oldLength + size + sizeof(heap_header_t));
+	}
+		
+	heap_header_t * newChunk = (heap_header_t *)loc;
+	newChunk->prev = prev;
+	newChunk->next = NULL;
+	newChunk->allocated = true;
+	newChunk->length = size;
+	
+	prev->next = newChunk;
+	return (void *)((uint32_t)newChunk + sizeof(heap_header_t));
 }
 
-void kfree(void * p) {
+void free(void *p, heap_t * heap) {
+	if (!p)
+		return;
+	if ((uint32_t)p < heap->startAddress || heap->endAddress < (uint32_t)p)
+		panic("Trying to free 0x%X from the wrong heap 0x%X", p, heap);
 	heap_header_t * header = (heap_header_t *)((uint32_t)p - sizeof(heap_header_t));
-	header->allocated = 0;
+	header->allocated = false;
 	chunk_glue(header);
 }
 
-
-static void chunk_alloc(uint32_t start, uint32_t len) {
-	while (start + len > heap_max) {
-		uint32_t page = pmm_allocPage();
-		vmm_map(heap_max, page, PAGE_PRESENT | PAGE_WRITE);
-		heap_max += 0x1000;
+void * kmalloc_int(uint32_t size, bool align, uint32_t * phys) {
+	if (kernelHeap) {
+		void * addr = alloc(size, align, kernelHeap);
+		if (phys) {
+			paging_page_t * page = paging_getPage((uint32_t)addr, 0, kernelDirectory);
+			*phys = (uint32_t)page->frame * 0x100 + ((uint32_t)addr & 0xFFF);
+		}
+		return addr;
+	} else {
+		if (align && (uint32_t)placementAddress & 0xFFFFF000) {
+			placementAddress = (void *)((uint32_t)placementAddress & 0xFFFFF000);
+			placementAddress = (void *)((uint32_t)placementAddress + 0x1000);
+		}
+		if (phys)
+			*phys = (uint32_t)placementAddress;
+		
+		void * tmp = placementAddress;
+		placementAddress = (void *)((uint32_t)placementAddress + size);
+		return tmp;
 	}
+}
+void * kmalloc(uint32_t size) {
+	return kmalloc_int(size, false, NULL);
+}
+void * kmalloc_a(uint32_t size) {
+	return kmalloc_int(size, true, NULL);
+}
+void * kmalloc_p(uint32_t size, uint32_t * phys) {
+	return kmalloc_int(size, false, phys);
+}
+void * kmalloc_ap(uint32_t size, uint32_t * phys) {
+	return kmalloc_int(size, true, phys);
+}
+
+void kfree(void * ptr) {
+	free(ptr, kernelHeap);
 }
 
 static void chunk_split(heap_header_t * chunk, uint32_t len) {
-	if (chunk->length - len > sizeof(heap_header_t)) {
-		heap_header_t * newChunk = (heap_header_t *) ((uint32_t)chunk + chunk->length);
-		newChunk->prev = chunk;
-		newChunk->next = NULL;
-		newChunk->allocated = 0;
-		newChunk->length = chunk->length - len;
-		
-		chunk->next = newChunk;
-		chunk->length = len;
-	}
+	heap_header_t * newChunk = (heap_header_t *)((uint32_t)chunk + len + sizeof(heap_header_t));
+	newChunk->prev = chunk;
+	newChunk->next = chunk->next;
+	newChunk->allocated = false;
+	newChunk->length = chunk->length - len - sizeof(heap_header_t);
+	
+	chunk->next = newChunk;
+	chunk->length = len;
 }
 
-
+//Chunk is not valid after you call this!
 static void chunk_glue(heap_header_t * chunk) {
+	bool again = false;
 	if (chunk->next && !chunk->next->allocated) {
-		chunk->length = chunk->length + chunk->next->length;
-		chunk->next->next->prev = chunk;
+		chunk->length = chunk->length + chunk->next->length + sizeof(heap_header_t);
+		if (chunk->next->next)
+			chunk->next->next->prev = chunk;
 		chunk->next = chunk->next->next;
+		again = true;
 	}
-
 	if (chunk->prev && !chunk->prev->allocated) {
-		chunk->prev->length = chunk->prev->length + chunk->length;
-		chunk->prev->prev = chunk->next;
+		chunk->prev->length = chunk->prev->length + chunk->length + sizeof(heap_header_t);
+		if (chunk->prev->prev)
+			chunk->prev->prev = chunk->next;
 		chunk->next->prev = chunk->prev;
 		chunk = chunk->prev;
+		again = true;
 	}
-
-	if (!chunk->next)
-		chunk_free(chunk);
-}
-
-
-static void chunk_free(heap_header_t * chunk) {
-	if (!chunk->prev)
-		heap_first = NULL;
-	else
-		chunk->prev->next = NULL;
-
-	while ((heap_max - 0x1000) >= (uint32_t)chunk) {
-		heap_max -= 0x1000;
-		uint32_t page;
-		vmm_getMapping(heap_max, &page);
-		pmm_freePage(page);
-		vmm_unmap(heap_max);
-	}
+	if (again)
+		chunk_glue(chunk);
 }
