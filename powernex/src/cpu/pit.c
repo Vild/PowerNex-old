@@ -2,12 +2,12 @@
 #include <powernex/cpu/idt.h>
 #include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
-#include <powernex/cpu/scheduler.h>
+#include <powernex/cpu/thread.h>
 
 uint32_t pit_tick = 0;
 static void pit_callback(UNUSED registers_t * regs) {
 	pit_tick++;
-	scheduler_schedule();
+	thread_next();
 }
 
 void pit_init(uint32_t frequency) {

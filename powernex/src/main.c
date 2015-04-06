@@ -6,7 +6,6 @@
 #include <powernex/cpu/idt.h>
 #include <powernex/cpu/pit.h>
 #include <powernex/cpu/thread.h>
-#include <powernex/cpu/scheduler.h>
 #include <powernex/io/port.h>
 #include <powernex/io/keyboard.h>
 #include <powernex/mem/heap.h>
@@ -20,6 +19,12 @@ static void step(const char * msg, ...);
 static void setup(multiboot_info_t * multiboot);
 static void welcome();
 static char * readline(int size, char echochar);
+
+static int thread1(void * arg);
+static int thread2(void * arg);
+
+static uint32_t thread1stack[0x1000];
+static uint32_t thread2stack[0x1000];
 
 int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	setup(multiboot);
@@ -50,7 +55,16 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	
 	kputc('\n');
 
+	
+	kprintf("Thread starting...\n");
+	thread_t * t1 = thread_create(thread1, (void *)"Mr Green", thread1stack+(0x1000/sizeof(uint32_t)));
+	thread_t * t2 = thread_create(thread2, (void *)"Mr Red", thread2stack+(0x1000/sizeof(uint32_t)));
+	thread_start(t1);
+	thread_start(t2);
+	while(thread_isRunning(t1) || thread_isRunning(t2));
 
+	kputcolor(DEFAULT_COLOR);
+	kprintf("Thread done\n");
 	while (true) {
 		kprintf("root@PowerNex# ");
 		while (true) {
@@ -64,8 +78,22 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 		kprintf("NOT IMPLEMENTED YET\n");
 		kputcolor(DEFAULT_COLOR);
 	}
+
 	
 	return 0xDEADBEEF;
+}
+
+
+static int thread1(void * arg) {
+	kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
+	kprintf("PID IS: %d NAME: %s\n", thread_current->id, (char*)arg);
+	return thread_current->id;
+}
+
+static int thread2(void * arg) {
+	kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
+	kprintf("PID IS: %d NAME: %s\n", thread_current->id, (char*)arg);
+	return thread_current->id;
 }
 
 static void step(const char * str, ...) {
@@ -135,8 +163,8 @@ static void setup(multiboot_info_t * multiboot) {
 	__asm__ volatile("sti");
 
 	//Multithreading
-	step("Initializing Scheduler...");
-	scheduler_init(thread_init());
+	step("Initializing Multithreading...");
+	thread_init();
 
 	//Hardware
 	step("Initializing PIT with %d HZ...", 100);
