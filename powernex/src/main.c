@@ -176,7 +176,7 @@ static void setup(multiboot_info_t * multiboot) {
 
 	step("Initializing Initrd...");
 	if (multiboot->mods_count == 0)
-		panic("No initrd defined in boot.cfg!");
+		panic("No initrd defined in grub.cfg!");
 	
 	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
   // uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
