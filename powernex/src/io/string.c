@@ -39,6 +39,20 @@ int strcmp(const char * str1, const char * str2) {
 		return 1;
 }
 
+int strncmp(const char * str1, const char * str2, int count) {
+	int i = 0;
+  while (*str1 && *str2 && (*str1++ == *str2++) && i++ < count)
+    ;
+
+  if ((*str1 == '\0' && *str2 == '\0') || i == count)
+    return 0;
+
+  if (*str1 == '\0')
+    return -1;
+  else
+		return 1;
+}
+
 char * strcpy(char * dest, const char * src) {
   while (*src)
     *dest++ = *src++;
