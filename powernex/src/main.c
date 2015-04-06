@@ -5,7 +5,7 @@
 #include <powernex/cpu/gdt.h>
 #include <powernex/cpu/idt.h>
 #include <powernex/cpu/pit.h>
-#include <powernex/cpu/thread.h>
+#include <powernex/cpu/task.h>
 #include <powernex/io/port.h>
 #include <powernex/io/keyboard.h>
 #include <powernex/mem/heap.h>
@@ -57,11 +57,11 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 
 	
 	kprintf("Thread starting...\n");
-	thread_t * t1 = thread_create(thread1, (void *)"Mr Green", thread1stack+(0x1000/sizeof(uint32_t)));
-	thread_t * t2 = thread_create(thread2, (void *)"Mr Red", thread2stack+(0x1000/sizeof(uint32_t)));
-	thread_start(t1);
-	thread_start(t2);
-	while(thread_isRunning(t1) || thread_isRunning(t2));
+	task_t * t1 = task_create(thread1, (void *)"Mr Green", thread1stack+(0x1000/sizeof(uint32_t)));
+	task_t * t2 = task_create(thread2, (void *)"Mr Red", thread2stack+(0x1000/sizeof(uint32_t)));
+	task_start(t1);
+	task_start(t2);
+	while(task_isRunning(t1) || task_isRunning(t2));
 
 	kputcolor(DEFAULT_COLOR);
 	kprintf("Thread done\n");
@@ -86,14 +86,14 @@ int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 
 static int thread1(void * arg) {
 	kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	kprintf("PID IS: %d NAME: %s\n", thread_current->id, (char*)arg);
-	return thread_current->id;
+	kprintf("PID IS: %d NAME: %s\n", task_current->id, (char*)arg);
+	return task_current->id;
 }
 
 static int thread2(void * arg) {
 	kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
-	kprintf("PID IS: %d NAME: %s\n", thread_current->id, (char*)arg);
-	return thread_current->id;
+	kprintf("PID IS: %d NAME: %s\n", task_current->id, (char*)arg);
+	return task_current->id;
 }
 
 static void step(const char * str, ...) {
@@ -164,7 +164,7 @@ static void setup(multiboot_info_t * multiboot) {
 
 	//Multithreading
 	step("Initializing Multithreading...");
-	thread_init();
+	task_init();
 
 	//Hardware
 	step("Initializing PIT with %d HZ...", 100);

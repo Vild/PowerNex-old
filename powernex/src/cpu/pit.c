@@ -2,12 +2,12 @@
 #include <powernex/cpu/idt.h>
 #include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
-#include <powernex/cpu/thread.h>
+#include <powernex/cpu/task.h>
 
 uint32_t pit_tick = 0;
 static void pit_callback(UNUSED registers_t * regs) {
 	pit_tick++;
-	thread_next();
+	task_next();
 }
 
 void pit_init(uint32_t frequency) {

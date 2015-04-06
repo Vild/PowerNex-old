@@ -1,37 +1,37 @@
-#include <powernex/cpu/thread.h>
+#include <powernex/cpu/task.h>
 
 #include <powernex/mem/heap.h>
 #include <powernex/string.h>
 #include <powernex/io/textmode.h>
 #include <powernex/cpu/pit.h>
 
-static uint32_t thread_counter = 1;
+static uint32_t task_counter = 1;
 
-void thread_switch();
+void task_switch();
 
-static void thread_exit();
-thread_t * thread_current = NULL;
-static thread_t * queue = NULL;
+static void task_exit();
+task_t * task_current = NULL;
+static task_t * queue = NULL;
 
-void thread_init() {
-	thread_t * thread = kmalloc(sizeof(thread_t));
-	memset(thread, 0, sizeof(thread_t));
-	thread->id = thread_counter++;
+void task_init() {
+	task_t * thread = kmalloc(sizeof(task_t));
+	memset(thread, 0, sizeof(task_t));
+	thread->id = task_counter++;
 	thread->dead = false;
 	thread->next = NULL;
 
-	queue = thread_current = thread;
+	queue = task_current = thread;
 }
 
-thread_t * thread_create(thread_func_f fn, void * arg, uint32_t * stack) {
-	thread_t * thread = kmalloc(sizeof(thread_t));
-	memset(thread, 0, sizeof(thread_t));
-	thread->id = thread_counter++;
+task_t * task_create(task_func_f fn, void * arg, uint32_t * stack) {
+	task_t * thread = kmalloc(sizeof(task_t));
+	memset(thread, 0, sizeof(task_t));
+	thread->id = task_counter++;
 	thread->dead = false;
 	thread->next = NULL;
 	
 	*--stack = (uint32_t)arg;
-	*--stack = (uint32_t)&thread_exit;
+	*--stack = (uint32_t)&task_exit;
 	*--stack = (uint32_t)fn;
 	
 	thread->esp = (uint32_t)stack;
@@ -40,25 +40,25 @@ thread_t * thread_create(thread_func_f fn, void * arg, uint32_t * stack) {
 	return thread;
 }
 
-static void thread_exit() {
+static void task_exit() {
 	register uint32_t val __asm__("eax");
 
 	kprintf("Thread exited with value %d\n", val);
-	thread_stop(thread_current);
+	task_stop(task_current);
 	while (true)
-		thread_next();
+		task_next();
 }
 
-void thread_start(thread_t * thread) {
-	thread_t * last = queue;
+void task_start(task_t * thread) {
+	task_t * last = queue;
 	while (last->next)
 		last = last->next;
 
 	last->next = thread;
 }
 
-void thread_stop(thread_t * thread) {
-	thread_t * cur = queue;
+void task_stop(task_t * thread) {
+	task_t * cur = queue;
 	
 	while (cur->next && cur->next != thread)
 		cur = cur->next;
@@ -69,8 +69,8 @@ void thread_stop(thread_t * thread) {
 		kfree(thread);
 }
 
-bool thread_isRunning(thread_t * thread) {
-	thread_t * cur = queue;
+bool task_isRunning(task_t * thread) {
+	task_t * cur = queue;
 	if (cur == thread) //Kernel is always running
 		return true;
 
@@ -83,14 +83,14 @@ bool thread_isRunning(thread_t * thread) {
 		return false;
 }
 
-void thread_next() {
-	thread_t * newThread = thread_current->next;
+void task_next() {
+	task_t * newThread = task_current->next;
 	if (!newThread)
 		newThread = queue;
 
 	if (newThread->dead) {
-		thread_t * tmp = newThread;
-		thread_t * cur = queue;
+		task_t * tmp = newThread;
+		task_t * cur = queue;
 
 		while (cur->next && cur->next != tmp)
 			cur = cur->next;
@@ -105,11 +105,11 @@ void thread_next() {
 		kfree(tmp);
 	}
 
-	thread_switch(newThread);
+	task_switch(newThread);
 }
 
 
-void thread_sleep(uint32_t time) {
+void task_sleep(uint32_t time) {
 	uint32_t tmp = pit_tick+time;
 	while (pit_tick < tmp);
 }

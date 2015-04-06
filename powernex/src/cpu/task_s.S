@@ -1,9 +1,9 @@
-	.global thread_switch
+	.global task_switch
 	.extern current_thread
-	.extern thread_exit
+	.extern task_exit
 
-thread_switch:
-	mov (thread_current), %eax // Loads current thread
+task_switch:
+	mov (task_current), %eax // Loads current thread
 
 	mov %esp,  0(%eax) // Saves regs
 	mov %ebp,  4(%eax)
@@ -12,7 +12,7 @@ thread_switch:
 	mov %edi, 16(%eax)
 
 	mov 4(%esp), %eax // Loads the next thread :D, System V i386 Call convertions FTW
-	mov %eax, (thread_current)
+	mov %eax, (task_current)
 
 	mov  0(%eax), %esp // Restores regs
 	mov  4(%eax), %ebp
