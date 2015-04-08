@@ -38,7 +38,7 @@ void cli_start() {
 }
 
 static int cli_run(char * line) {
-	if (!strncmp(line, "logout", 6) || !strncmp(line, "quit", 4)) 
+	if (!strncmp(line, "logout", 6) || !strncmp(line, "exit", 4))
 		logout = true;
 	else if (!strncmp(line, "clear", 5))
 		textmode_clear();
@@ -48,6 +48,8 @@ static int cli_run(char * line) {
 		kprintf("%s\n", line + 5);
 	else if (!strncmp(line, "echo ", 4))
 		kprintf("\n");
+	else if (!strncmp(line, "help", 4))
+		kprintf("Current commands are: clear, echo, exit, help, logout, whoami\n");
 	else {
 		kprintf("'%s' IS NOT IMPLEMENTED\n", line);
 		return -1;
