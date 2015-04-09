@@ -101,6 +101,7 @@ static void putLine(int x0, int y0, int x1, int y1, int rgb) {
 }
 
 static void putCircle(int x0, int y0, int radius, int rgb) {
+  //Midpoint circle algorithm
   int x = radius;
   int y = 0;
   int radiusError = 1-x;
