@@ -14,6 +14,7 @@
 #include <powernex/fs/initrd.h>
 #include <powernex/string.h>
 #include <powernex/cli.h>
+#include <powernex/io/vbe.h>
 #include <stdarg.h>
 
 static void step(const char * msg, ...);
@@ -75,6 +76,10 @@ static void setup(multiboot_info_t * multiboot) {
 	step("Initializing Keyboard driver...");
 	kb_init();
 
+	//Register keyboard
+	step("Initializing VBE...");
+	vbe_init(multiboot);
+	
 	step("Initializing Initrd...");
 	if (multiboot->mods_count == 0)
 		panic("No initrd defined in grub.cfg!");
