@@ -1,6 +1,8 @@
 PowerNex
 ========
 
+[![Stories in Ready](https://badge.waffle.io/Vild/PowerNex.png?label=ready&title=Ready)](http://waffle.io/Vild/PowerNex)
+
 WTF is this sh*t
 ----------------
 This is a kernel that I made for a school project.
