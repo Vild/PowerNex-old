@@ -30,5 +30,12 @@ typedef struct vbe_modeinfo {
 } __attribute__((packed)) vbe_modeinfo_t;
 
 void vbe_init(multiboot_info_t * multiboot);
+void vbe_putPixel(int x, int y, int rgb);
+void vbe_putRect(int x, int y, int width, int height, int rgb);
+void vbe_putLine(int x1, int y1, int x2, int y2, int rgb);
+void vbe_putCircle(int x0, int y0, int radius, int rgb);
+
+void vbe_drawChar(int x, int y, uint16_t c, int rgb);
+void vbe_print(char * str, int x, int y, int rgb);
 
 #endif

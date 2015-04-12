@@ -52,6 +52,16 @@ static void setup(multiboot_info_t * multiboot) {
 	step("Initializing IDT...");
 	idt_init();
 
+
+	__asm__ volatile ("fninit");
+	uint16_t tmp = 0x37F;
+	__asm__ volatile("fldcw %0" :: "m"(tmp));
+	__asm__ volatile ("clts");
+	size_t t;
+	__asm__ volatile ("mov %%cr4, %0" : "=r"(t));
+	t |= 3 << 9;
+	__asm__ volatile ("mov %0, %%cr4" :: "r"(t));
+	
 	//Memory	
 	step("Initializing paging with %d MB...", (multiboot->mem_lower + multiboot->mem_upper)/1024);
 	paging_init(multiboot);

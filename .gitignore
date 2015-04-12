@@ -19,3 +19,8 @@ powernex/src/text/font.h
 initrd.img
 mkinitrd
 win-bochs
+utils/logoconv
+powernex/include/text/logo.h
+powernex/include/text/cool.h
+Logo.bmp
+cool.bmp

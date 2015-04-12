@@ -5,18 +5,15 @@
 #include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
 #include <powernex/text/font.h>
+#include <powernex/text/logo.h>
+#include <powernex/text/cool.h>
+
 #include <powernex/math.h>
 
 extern const struct bitmap_font font;
 
-static void putPixel(int x, int y, int rgb);
-static void putRect(int x, int y, int width, int height, int rgb);
-static void putLine(int x1, int y1, int x2, int y2, int rgb);
-static void putCircle(int x0, int y0, int radius, int rgb);
-
 static int screenRefresh(void * arg);
 static void paintBackground();
-static void drawChar(int x, int y, uint16_t c, int rgb);
 
 static vbe_modeinfo_t * modeInfo;
 static uint8_t * screenBuffer;
@@ -50,14 +47,14 @@ static int screenRefresh(UNUSED void * arg) {
 		while ((inb(0x3DA) & 0x08))
 			task_next();
 		while (!(inb(0x3DA) & 0x08))
-		task_next();
+			task_next();
 		memcpy((void *)modeInfo->physbase, screenBuffer, screenBufferSize);
 		task_next();
 	}
 	return 0;
 }
 
-static void putPixel(int x, int y, int rgb) {
+void vbe_putPixel(int x, int y, int rgb) {
 //do not write memory outside the screen buffer, check parameters against the VBE mode info
 	if (x < 0 || x > width || y < 0 || y > height)
 		return;
@@ -72,49 +69,76 @@ static void putPixel(int x, int y, int rgb) {
 	cTemp[2] = (rgb>>16) & 0xff;
 }
 
-static void putRect(int x, int y, int width, int height, int rgb) {
+void vbe_putRect(int x, int y, int width, int height, int rgb) {
 	for (int x_ = x; x_ < x+width; x_++)
 		for (int y_ = y; y_ < y+height; y_++)
-			putPixel(x_, y_, rgb);
+			vbe_putPixel(x_, y_, rgb);
 }
 
-static void putLine(int x0, int y0, int x1, int y1, int rgb) {
+void vbe_putLine(int x0, int y0, int x1, int y1, int rgb) {
 	//Bresenham's line algorithm
-	int deltax = x1 - x0;
-	int deltay = y1 - y0;
-	float error = 0;
-	float deltaerr = abs((float)deltay / (float)deltax);
-	int y = y0;
-	int xd = (deltax < 0) ? -1 : 1;
-	int yd = (deltay < 0) ? -1 : 1;
+	int steep = abs(y1 - y0) > abs(x1 - x0);
+	int inc = -1;
+
+	if (steep) {
+		int tmp = x0;
+		x0 = y0;
+		y0 = tmp;
+
+		tmp = x1;
+		x1 = y1;
+		y1 = tmp;
+	}
+
+	if (x0 > x1) {
+		int tmp = x0;
+		x0 = x1;
+		x1 = tmp;
+
+		tmp = y0;
+		y0 = y1;
+		y1 = tmp;
+	}
+
+	if (y0 < y1)
+		inc = 1;
+
+	int dx = abs(x0 - x1);
+	int dy = abs(y1 - y0);
+	int e = 0;
+	int	y = y0;
 	int x = x0;
-	while ((deltax < 0 && x > x1) || (deltax > 0 && x < x1)) {
-		putPixel(x, y, rgb);
-		error += deltaerr;
-		while (error >= 0.5) {
-			putPixel(x, y, rgb);
-			y += yd;
-			error -= 1.0;
-			x += xd;
+
+	for (; x <= x1; x++) {
+		if (steep)
+			vbe_putPixel(y, x, rgb);
+		else
+			vbe_putPixel(x, y, rgb);
+		
+		if ((e + dy) << 1 < dx)
+			e += dy;
+		else {
+			y += inc;
+			e += dy - dx;
 		}
 	}
 }
 
-static void putCircle(int x0, int y0, int radius, int rgb) {
+void vbe_putCircle(int x0, int y0, int radius, int rgb) {
   //Midpoint circle algorithm
   int x = radius;
   int y = 0;
   int radiusError = 1-x;
  
   while(x >= y) {
-    putPixel( x + x0,  y + y0, rgb);
-    putPixel( y + x0,  x + y0, rgb);
-    putPixel(-x + x0,  y + y0, rgb);
-    putPixel(-y + x0,  x + y0, rgb);
-    putPixel(-x + x0, -y + y0, rgb);
-    putPixel(-y + x0, -x + y0, rgb);
-    putPixel( x + x0, -y + y0, rgb);
-    putPixel( y + x0, -x + y0, rgb);
+    vbe_putPixel( x + x0,  y + y0, rgb);
+    vbe_putPixel( y + x0,  x + y0, rgb);
+    vbe_putPixel(-x + x0,  y + y0, rgb);
+    vbe_putPixel(-y + x0,  x + y0, rgb);
+    vbe_putPixel(-x + x0, -y + y0, rgb);
+    vbe_putPixel(-y + x0, -x + y0, rgb);
+    vbe_putPixel( x + x0, -y + y0, rgb);
+    vbe_putPixel( y + x0, -x + y0, rgb);
     y++;
     if (radiusError < 0)
       radiusError += 2 * y + 1;
@@ -125,18 +149,34 @@ static void putCircle(int x0, int y0, int radius, int rgb) {
   }
 }
 
+void vbe_print(char * str, int x, int y, int rgb) {
+	for (int i = 0; i < strlen(str); i++)
+		vbe_drawChar(x + font.Width*i, y, str[i], rgb);
+}
+
 static void paintBackground() {
-	putRect(0, 0, width, height, 0x000000);
-	int c = 0;
-	for (uint16_t i = 'A'; i < 'Z'+1; i++, c++)
-		drawChar(2+(font.Width+2)*c, 10, i, 0xFF00FF);
+	vbe_putRect(0, 0, width, height, 0x000000);
+	vbe_print("Hello World!, Hello Viewers :D", 10, 10, 0x00FFFFFF);
 
-	putLine(150-50, 150-50, 150+50, 150+50, 0xFF0000);
-	putLine(150-50, 150+50, 150+50, 150-50, 0x00FF00);
-	putLine(250+50, 150-50, 250-50, 150+50, 0x0000FF);
-	putLine(250+50, 150+50, 250-50, 150-50, 0xFFFF00);
 
-	putCircle(400, 150, 25, 0xFF00FF);
+	vbe_putCircle(200, 200, 100, 0x00FF00);
+	vbe_putCircle(200, 200, 90, 0x00FF00);
+	
+
+	for (uint32_t x = 0; x < logo_width*2; x++)
+		for (uint32_t y = 0; y < logo_height*2; y++)
+			vbe_putPixel(x+300, y+75, (
+										 (logo_data[(x/2+(y/2*logo_width))*3+0] << 16) |
+										 (logo_data[(x/2+(y/2*logo_width))*3+1] << 8)  |
+										 (logo_data[(x/2+(y/2*logo_width))*3+2] << 0)));
+
+	
+	for (uint32_t x = 0; x < cool_width*2; x++)
+		for (uint32_t y = 0; y < cool_height*2; y++)
+			vbe_putPixel(x+300, y+200, (
+										 (cool_data[(x/2+(y/2*cool_width))*3+0] << 16) |
+										 (cool_data[(x/2+(y/2*cool_width))*3+1] << 8)  |
+										 (cool_data[(x/2+(y/2*cool_width))*3+2] << 0)));
 }
 
 static const uint8_t * getFontPos(uint16_t c) {
@@ -150,13 +190,13 @@ static const uint8_t * getFontPos(uint16_t c) {
 	return &font.Bitmap[0];
 }
 
-static void drawChar(int x_, int y_, uint16_t c, int rgb) {
+void vbe_drawChar(int x_, int y_, uint16_t c, int rgb) {
 	const uint8_t * lines = getFontPos(c);
 	for (int y = 0; y < font.Height; y++) {
 		uint8_t line = lines[y];
 		for (int x = 0; x < font.Width; x++) {
 			if (line & (1 << x))
-				putPixel(x_ + (font.Width - x), y_ + y, rgb);
+				vbe_putPixel(x_ + (font.Width - x), y_ + y, rgb);
 		}
 	}
 }

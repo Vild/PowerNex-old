@@ -10,7 +10,7 @@ LD	:= $(PREFIX)ld
 
 ARFLAGS := rcs
 ASFLAGS := -march=generic32 --32 --nocompress-debug-sections -D -g --gdwarf-2
-CFLAGS  := -std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-mmx -mno-3dnow -Iincludes -Wall -Werror -pedantic -fsigned-bitfields -funsigned-bitfields
+CFLAGS  := -std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-mmx -mno-3dnow -Iincludes -Wall -Werror -pedantic -fsigned-bitfields -funsigned-bitfields -Wno-overlength-strings
 LDFLAGS :=
 # Global ARFLAGS.
 
@@ -25,6 +25,12 @@ MKINITRD_SRC  := $(MKINITRD_TOOL).c
 INITRD        := iso/boot/initrd.img
 INITRD_DIR    := initrd
 
+LOGOCONV_TOOL	:= utils/logoconv
+LOGOCONV_SRC	:= $(LOGOCONV_TOOL).c
+LOGOCONV_IN		:= Logo.bmp
+LOGOCONV_OUT  := powernex/include/text/logo.h
+LOGOCONV_NS		:= logo
+
 POWERNEX      := iso/boot/powernex.krl
 
 .PHONY: clean mrproper $(MODULES) bochs
@@ -35,18 +41,21 @@ all: powernex.iso
 run: bochs
 
 
-powernex: bin/powernex.krl
+powernex: $(LOGOCONV_OUT) bin/powernex.krl
 
 iso: powernex.iso
 
 powernex.iso: $(POWERNEX) $(INITRD)
 	grub-mkrescue -d /usr/lib/grub/i386-pc -o powernex.iso iso
 
-$(POWERNEX): bin/powernex.krl
-	cp $< $@
+$(POWERNEX): $(LOGOCONV_OUT) powernex/include/text/cool.h bin/powernex.krl
+	cp bin/powernex.krl $@
 
 bochs: bochsrc.txt powernex.iso
 	bochs -f bochsrc.txt -q || true
+
+make-logo: $(LOGOCONV_OUT)
+
 
 ###################################################################
 # What follows are several templates (think "functions"), which are
@@ -70,12 +79,23 @@ $(FONT_SRC): $(FONT_TOOL)
 	@utils/bdf2c -C $(FONT_H) -b < utils/u_vga16.bdf > $@
 	@sed -i 's/\#include \"font\.h\"/\#include \<powernex\/text\/font\.h\>/g' $@
 
-$(MKINITRD_TOOL): $(MKINITRD_SRC) FORCE
+$(MKINITRD_TOOL): $(MKINITRD_SRC)
 	@echo TOOL: Compiling $<
-	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $(MKINITRD_SRC) 
+	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $^
 
-$(INITRD): $(MKINITRD_TOOL) $(shell find $(INITRD_DIR))
+$(INITRD): $(MKINITRD_TOOL) $(shell find $(INITRD_DIR)) FORCE
 	$(MKINITRD_TOOL) -o $@ -i $(INITRD_DIR)
+
+$(LOGOCONV_TOOL): $(LOGOCONV_SRC)
+	@echo TOOL: Compiling $<
+	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $^
+
+$(LOGOCONV_OUT): $(LOGOCONV_TOOL) $(LOGOCONV_IN)
+	$(LOGOCONV_TOOL) $(LOGOCONV_IN) $(LOGOCONV_OUT) $(LOGOCONV_NS)
+
+powernex/include/text/cool.h: $(LOGOCONV_TOOL) cool.bmp
+	$(LOGOCONV_TOOL) cool.bmp $@ cool
+
 
 # Including a module's build.mk
 define MK_template
