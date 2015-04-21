@@ -29,13 +29,20 @@ typedef struct vbe_modeinfo {
   uint16_t reserved2;
 } __attribute__((packed)) vbe_modeinfo_t;
 
-void vbe_init(multiboot_info_t * multiboot);
-void vbe_putPixel(int x, int y, int rgb);
-void vbe_putRect(int x, int y, int width, int height, int rgb);
-void vbe_putLine(int x1, int y1, int x2, int y2, int rgb);
-void vbe_putCircle(int x0, int y0, int radius, int rgb);
+typedef struct vbe_color {
+	uint8_t a;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+} vbe_color_t;
 
-void vbe_drawChar(int x, int y, uint16_t c, int rgb);
-void vbe_print(char * str, int x, int y, int rgb);
+void vbe_init(multiboot_info_t * multiboot);
+void vbe_putPixel(int x, int y, vbe_color_t * color);
+void vbe_putRect(int x, int y, int width, int height, vbe_color_t * color);
+void vbe_putLine(int x1, int y1, int x2, int y2, vbe_color_t * color);
+void vbe_putCircle(int x0, int y0, int radius, vbe_color_t * color);
+
+void vbe_drawChar(int x, int y, uint16_t c, vbe_color_t * fgcolor, vbe_color_t * bgcolor);
+void vbe_print(char * str, int x, int y, vbe_color_t * fgcolor, vbe_color_t * bgcolor);
 
 #endif

@@ -126,7 +126,7 @@ void kb_switchLayout(kb_keyMap_t * layout) {
 
 static void kb_callback(UNUSED registers_t * regs) {
 	uint8_t scancode = inb(0x60);
- 
+
   if(scancode & RELEASED_MASK) {
     for(int i = 0; i < 5; i++) {
       if(kb_currentLayout->controlMap[i] == (scancode & ~RELEASED_MASK)) {

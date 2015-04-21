@@ -12,7 +12,6 @@ static void pit_callback(UNUSED registers_t * regs) {
 
 void pit_init(uint32_t frequency) {
 	idt_registerHandler(IRQ(0), &pit_callback);
-
 	uint32_t divisor = 1193180 / frequency;
 
 	outb(0x43, 0x36);

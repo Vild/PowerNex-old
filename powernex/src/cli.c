@@ -46,7 +46,7 @@ static int cli_run(char * line) {
 		kprintf("%s\n", user);
 	else if (!strncmp(line, "echo ", 5)) //HACK!
 		kprintf("%s\n", line + 5);
-	else if (!strncmp(line, "echo ", 4))
+	else if (!strncmp(line, "echo", 4))
 		kprintf("\n");
 	else if (!strncmp(line, "help", 4))
 		kprintf("Current commands are: clear, echo, exit, help, logout, whoami\n");
@@ -64,25 +64,25 @@ static void welcome() {
 	const char * line3_ = build_git_version;
 	const char * line4 = "Created by: Dan Printzell";
 	const char * line5 = "License: Mozilla Public License, version 2.0";
-	
+
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	kputc(' '   );kputc(' '   );kputc('\xB3');kputc(' '   );kputc(' '   );
+	kputc(' ');kputc(' ');kputc('|');kputc(' ');kputc(' ');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line1);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
 	
-	kputc('\xC9');kputc('\xCD');kputc('\xB3');kputc('\xCD');kputc('\xBB');
+	kputc('|');kputc('-');kputc('|');kputc('-');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line2);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
 	
-	kputc('\xBA');kputc(' '   );kputc('\xB3');kputc(' '   );kputc('\xBA');
+	kputc('|');kputc(' ');kputc('|');kputc(' ');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s%s", line3, line3_);kputc('\n');
 	kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
 	
-	kputc('\xBA');kputc(' '   );kputc(' '   );kputc(' '   );kputc('\xBA');
+	kputc('|');kputc(' ');kputc(' ');kputc(' ');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line4);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
 	
-	kputc('\xC8');kputc('\xCD');kputc('\xCD');kputc('\xCD');kputc('\xBC');
+	kputc('|');kputc('-');kputc('-');kputc('-');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line5);kputc('\n');
 }
 

@@ -23,7 +23,7 @@ typedef struct {
 	uint32_t edi, esi, ebp, useless_value, ebx, edx, ecx, eax;
 	uint32_t int_no, err_code;
 	uint32_t eip, cs, eflags, esp, ss;
-} registers_t;
+} __attribute__((packed)) registers_t;
 
 typedef void (*idt_interruptHandler_t)(registers_t *);
 

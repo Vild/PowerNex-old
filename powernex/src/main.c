@@ -43,7 +43,7 @@ static void step(const char * str, ...) {
 }
 
 static void setup(multiboot_info_t * multiboot) {
-	//Textmode
+  //Textmode
 	textmode_clear(); // Also initalizes textmode
 	
 	//GDT
@@ -52,7 +52,7 @@ static void setup(multiboot_info_t * multiboot) {
 	step("Initializing IDT...");
 	idt_init();
 
-
+	//Initializing FPU (Floating pointer unit)
 	__asm__ volatile ("fninit");
 	uint16_t tmp = 0x37F;
 	__asm__ volatile("fldcw %0" :: "m"(tmp));
@@ -61,7 +61,7 @@ static void setup(multiboot_info_t * multiboot) {
 	__asm__ volatile ("mov %%cr4, %0" : "=r"(t));
 	t |= 3 << 9;
 	__asm__ volatile ("mov %0, %%cr4" :: "r"(t));
-	
+
 	//Memory	
 	step("Initializing paging with %d MB...", (multiboot->mem_lower + multiboot->mem_upper)/1024);
 	paging_init(multiboot);
@@ -70,26 +70,26 @@ static void setup(multiboot_info_t * multiboot) {
 	step("Initializing Backtrace...");
 	elf_init(&(multiboot->u.elf_sec));
 
-	//Exceptions
-	step("Initializing enabling Exceptions...");
-	__asm__ volatile("sti");
-
 	//Multithreading
 	step("Initializing Multithreading...");
 	task_init();
 
+	//Graphics
+	step("Initializing VBE");
+	vbe_init(multiboot);
+
 	//Hardware
-	step("Initializing PIT with %d HZ...", 100);
-	pit_init(100/*HZ*/);
+	step("Initializing PIT with %d HZ...", 50);
+	pit_init(50/*HZ*/);
 
 	//Register keyboard
 	step("Initializing Keyboard driver...");
 	kb_init();
 
-	//Register keyboard
-	step("Initializing VBE...");
-	vbe_init(multiboot);
-	
+	//Exceptions
+	step("Initializing enabling Exceptions...");
+	__asm__ volatile("sti");
+
 	step("Initializing Initrd...");
 	if (multiboot->mods_count == 0)
 		panic("No initrd defined in grub.cfg!");

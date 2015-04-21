@@ -18,7 +18,7 @@ void idt_init() {
 	idt_ptr.limit = sizeof(idt_entry_t)*256 -1;
 	idt_ptr.base = (uint32_t) &idt_entries;
 
-	memset(idt_entries, 0, sizeof(idt_entry_t) * 255);
+	memset(idt_entries, 0, sizeof(idt_entry_t) * 256);
 
 	outb(0x20, 0x11);
   outb(0xA0, 0x11);
@@ -107,10 +107,8 @@ static void idt_setGate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
 void idt_handler(registers_t * regs) {
 	if (interruptHandlers[regs->int_no])
 		interruptHandlers[regs->int_no](regs);
-	else {
-		
+	else
 		panic("Unhandled interrupt: %d\n", regs->int_no);
-	}
 }
 
 void irq_handler(registers_t * regs) {
