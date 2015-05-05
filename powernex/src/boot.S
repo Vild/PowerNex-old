@@ -27,7 +27,7 @@ multiboot_header:
 	.long 0
 	.long 800
 	.long 600
-	.long 32
+	.long 24
 	//http://wiki.osdev.org/GUI
 .section .text
 .global start
