@@ -12,6 +12,12 @@ Authors
 -------
 Dan "Wild" Printzell
 
+Economic Contributors
+---------------------
+jeppeake $5.67
+chochman $5
+
+
 License
 -------
 Mozilla Public License, version 2.0
