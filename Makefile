@@ -1,7 +1,7 @@
 MODULES := powernex
 
 #PREFIX	:= cc/Linux/bin/x86_64-pc-elf-
-PREFIX	:= cc/Linux/bin/i686-pc-elf-
+PREFIX	:= cc/bin/i686-powernex-
 AR	:= $(PREFIX)ar
 AS	:= $(PREFIX)as
 CC	:= $(PREFIX)gcc
@@ -107,16 +107,16 @@ define RULES_template
 $(1)/obj/buildinfo.o: buildinfo.c
 	@mkdir -p $$(dir $$@)
 	@echo Compiling $$<
-	@$$(CC) $$(CFLAGS) $$(CFLAGS_$(1)) -Iincludes/$(2) -c $$< -o $$@
+	@$$(CC) $$(CFLAGS) $$(CFLAGS_$(1)) -Iincludes/$(2) -Inewlib/newlib/libc/include -c $$< -o $$@
 
 $(1)/obj/%.o: $(1)/src/%.c
 	@mkdir -p $$(dir $$@)
 	@echo Compiling $$<
-	@$$(CC) $$(CFLAGS) $$(CFLAGS_$(1)) -Iincludes/$(2) -c $$< -o $$@
+	@$$(CC) $$(CFLAGS) $$(CFLAGS_$(1)) -Iincludes/$(2) -Inewlib/newlib/libc/include -c $$< -o $$@
 $(1)/obj/%.o: $(1)/src/%.S
 	@mkdir -p $$(dir $$@)
 	@echo Compiling $$<
-	@$$(AS) $$(ASFLAGS) $$(ASFLAGS_$(1)) -Iincludes/$(2) -c $$< -o $$@
+	@$$(AS) $$(ASFLAGS) $$(ASFLAGS_$(1)) -Iincludes/$(2) -Inewlib/newlib/libc/include -c $$< -o $$@
 endef
 
 # Setting a module's build rules for executable targets.

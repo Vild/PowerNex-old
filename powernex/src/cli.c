@@ -37,7 +37,13 @@ void cli_start() {
 	}
 }
 
+extern bool vbe_text_mode;
+extern int vbe_pattern;
+
 static int cli_run(char * line) {
+
+	kprintf("Line is: '%s'\n", line);
+	
 	if (!strncmp(line, "logout", 6) || !strncmp(line, "exit", 4))
 		logout = true;
 	else if (!strncmp(line, "clear", 5))
@@ -48,6 +54,11 @@ static int cli_run(char * line) {
 		kprintf("%s\n", line + 5);
 	else if (!strncmp(line, "echo", 4))
 		kprintf("\n");
+	else if (!strncmp(line, "patt ", 5)) {
+		vbe_text_mode = false;
+		vbe_pattern = line[5] - '1';
+	} else if (!strncmp(line, "1", 4))
+		vbe_text_mode = true;
 	else if (!strncmp(line, "help", 4))
 		kprintf("Current commands are: clear, echo, exit, help, logout, whoami\n");
 	else {

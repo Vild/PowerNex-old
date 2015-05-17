@@ -27,6 +27,28 @@ static const uint8_t * charLookup[UINT16_MAX + 1];
 
 static uint32_t stack[0x1000];
 
+bool vbe_text_mode = true;
+int vbe_pattern = 0;
+
+#define NUM_DOTS 2048
+
+typedef struct dot {
+	uint8_t red,green,blue,speed;
+	float vx, vy;
+	float x,y;	
+} dot_t;
+
+dot_t demo_dots[NUM_DOTS];
+
+static unsigned long int next = 0xDEADBEEF;
+
+int rand(void) // RAND_MAX assumed to be 32767
+{
+    next = next * 1103515245 + 12345;
+    return (unsigned int)(next/65536) % 32768;
+}
+
+
 void vbe_init(multiboot_info_t * multiboot) {
 	modeInfo = (vbe_modeinfo_t *)multiboot->vbe_mode_info;
 
@@ -46,6 +68,15 @@ void vbe_init(multiboot_info_t * multiboot) {
 	textmode_resize(width/font.Width, height/font.Height);
 
 	createLookupTable();
+
+	for (int i = 0;i < NUM_DOTS; i++) {
+	  demo_dots[i].red = 0;
+	  demo_dots[i].green = rand() % 255;
+	  demo_dots[i].blue = rand() % 255;
+	  demo_dots[i].x = rand() % width;
+	  demo_dots[i].y = rand() % height;
+	  demo_dots[i].speed = 1 + rand() % 5;
+	}
 
 	screenRefreshTask = task_create(&screenRefresh, NULL, stack + (0x1000/sizeof(uint32_t)));
 	task_start(screenRefreshTask);
@@ -312,17 +343,87 @@ void fromTBColor(uint8_t color, vbe_color_t * fgcolor, vbe_color_t * bgcolor) {
 static void paintBackground() {
 	vbe_putRect(0, 0, width, height, &(vbe_color_t){.a = 255, .r = 0, .g = 0, .b = 0});
 
-	vbe_color_t fg, bg;
+	if (vbe_text_mode) {
+		vbe_color_t fg, bg;
 
-	for (int x = 0; x < currentTTY->width; x++) {
-		for (int y = 0; y < currentTTY->height; y++) {
-			int pos = (y*currentTTY->width)+x;
-			char text = currentTTY->text[pos];
-			uint8_t color = currentTTY->color[pos];
-			if (!text)
-				break;
-			fromTBColor(color, &fg, &bg);
-			vbe_drawChar(font.Width*x, font.Height*y, text, &fg, &bg);
+		for (int x = 0; x < currentTTY->width; x++) {
+			for (int y = 0; y < currentTTY->height; y++) {
+				int pos = (y*currentTTY->width)+x;
+				char text = currentTTY->text[pos];
+				uint8_t color = currentTTY->color[pos];
+				if (!text)
+					break;
+				fromTBColor(color, &fg, &bg);
+				vbe_drawChar(font.Width*x, font.Height*y, text, &fg, &bg);
+			}
+		}
+	} else {
+		static int tick = 0;
+		tick++;
+		
+		if (vbe_pattern == 0) {
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					int tmp = tick << 2;
+					tmp += x + y;
+					vbe_putPixel(x, y, &(vbe_color_t){.a = 255,
+								.r = (uint8_t)((tmp + tick * 3) & 0xFF),
+								.g = (uint8_t)((tmp + tick * 5) & 0xFF),
+								.b = (uint8_t)((tmp + tick) & 0xFF)});
+				}
+			}
+		} else if (vbe_pattern == 1) {
+			for (int i = 0; i < NUM_DOTS; i++)
+				demo_dots[i].x = ((int)(demo_dots[i].x + demo_dots[i].speed) % width);
+
+
+			for(int i = 0; i < NUM_DOTS; i++) {
+				vbe_putPixel((int)demo_dots[i].x, (int)demo_dots[i].y, &(vbe_color_t){.a = 255,
+							.r = demo_dots[i].red,
+							.g = demo_dots[i].green,
+							.b = demo_dots[i].blue});
+			}
+		} else if (vbe_pattern == 2) {
+			#define numSteps 0x12000
+			float ax = 10;
+			float ay = height - 10;
+			float bx = width - 10;
+			float by = height - 10;
+			float cx = width / 2;
+			float cy = 10;
+
+			//initial coordinates for the point px
+			float px = ax;
+			float py = ay;
+    
+			//do the process numSteps times
+			for(int n = 0; n < numSteps; n++) {
+        //draw the pixel
+				int tmp = px + py;
+					
+				vbe_color_t color = (vbe_color_t){.a = 255,
+																			.r = (uint8_t)((tmp + tick * 3) & 0xFF),
+																			.g = (uint8_t)((tmp + tick * 5) & 0xFF),
+																			.b = (uint8_t)((tmp + tick * 2) & 0xFF)};
+				vbe_putPixel((int)px, (int)py, &color);
+        
+        //pick a random number 0, 1 or 2
+        switch(abs(rand() % 3)) {
+					//depending on the number, choose another new coordinate for point p
+				case 0:
+					px = (px + ax) / 2.0;
+					py = (py + ay) / 2.0;
+					break;
+				case 1:
+					px = (px + bx) / 2.0;
+					py = (py + by) / 2.0;
+					break;
+				case 2:
+					px = (px + cx) / 2.0;
+					py = (py + cy) / 2.0;
+					break;
+        }
+			}
 		}
 	}
 }

@@ -1,0 +1,183 @@
+diff -urN binutils-2.25.org/bfd/config.bfd binutils-2.25/bfd/config.bfd
+--- binutils-2.25.org/bfd/config.bfd	2015-05-07 14:56:32.410865360 +0200
++++ binutils-2.25/bfd/config.bfd	2015-05-09 00:37:08.266680046 +0200
+@@ -513,6 +513,18 @@
+     targ_defvec=i370_elf32_vec
+     targ_selvecs="i370_elf32_vec"
+     ;;
++  i[3-7]86-*-powernex*)
++    targ_defvec=i386_elf32_vec
++    targ_selvecs=
++    targ64_selvecs=x86_64_elf64_vec
++    ;;
++#ifdef BFD64
++  x86_64-*-powernex*)
++    targ_defvec=x86_64_elf64_vec
++    targ_selvecs=i386_elf32_vec
++    want64=true
++    ;;
++#endif
+   i[3-7]86-*-sco3.2v5*coff)
+     targ_defvec=i386_coff_vec
+     targ_selvecs=i386_elf32_vec
+diff -urN binutils-2.25.org/config.sub binutils-2.25/config.sub
+--- binutils-2.25.org/config.sub	2015-05-07 14:56:32.404198574 +0200
++++ binutils-2.25/config.sub	2015-05-07 14:58:29.869629631 +0200
+@@ -2,7 +2,7 @@
+ # Configuration validation subroutine script.
+ #   Copyright 1992-2014 Free Software Foundation, Inc.
+ 
+-timestamp='2014-07-28'
++timestamp='2015-05-07'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -1364,7 +1364,7 @@
+ 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
+ 	      | -sym* | -kopensolaris* | -plan9* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+-	      | -aos* | -aros* \
++	      | -aos* | -aros* | -powernex* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+ 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
+ 	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
+diff -urN binutils-2.25.org/gas/configure.tgt binutils-2.25/gas/configure.tgt
+--- binutils-2.25.org/gas/configure.tgt	2015-05-07 14:56:32.454199467 +0200
++++ binutils-2.25/gas/configure.tgt	2015-05-09 00:38:40.131632551 +0200
+@@ -206,6 +206,7 @@
+ 
+   i370-*-elf* | i370-*-linux*)		fmt=elf ;;
+ 
++  i386-*-powernex*)		fmt=elf ;;
+   i386-ibm-aix*)			fmt=coff em=i386aix ;;
+   i386-sequent-bsd*)			fmt=aout em=dynix ;;
+   i386-*-beospe*)			fmt=coff em=pe ;;
+diff -urN binutils-2.25.org/ld/configure.tgt binutils-2.25/ld/configure.tgt
+--- binutils-2.25.org/ld/configure.tgt	2015-05-07 14:56:32.657536431 +0200
++++ binutils-2.25/ld/configure.tgt	2015-05-07 15:22:59.225853691 +0200
+@@ -212,6 +212,15 @@
+ 			;;
+ i370-*-elf* | i370-*-linux-*) targ_emul=elf32i370
+ 			;;
++i[3-7]86-*-powernex*)
++      targ_emul=elf_i386_powernex
++      targ_extra_emuls=elf_i386
++      targ64_extra_emuls="elf_x86_64_powernex elf_x86_64"
++      ;;
++x86_64-*-powernex*)
++      targ_emul=elf_x86_64_powernex
++      targ_extra_emuls="elf_i386_powernex elf_x86_64 elf_i386"
++      ;;
+ i[3-7]86-*-nto-qnx*)	targ_emul=i386nto ;;
+ i[3-7]86-*-vsta)	targ_emul=vsta ;;
+ i[3-7]86-*-go32)	targ_emul=i386go32 ;;
+diff -urN binutils-2.25.org/ld/emulparams/elf_i386_powernex.sh binutils-2.25/ld/emulparams/elf_i386_powernex.sh
+--- binutils-2.25.org/ld/emulparams/elf_i386_powernex.sh	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.25/ld/emulparams/elf_i386_powernex.sh	2015-05-07 15:24:33.664202422 +0200
+@@ -0,0 +1,3 @@
++. ${srcdir}/emulparams/elf_i386.sh
++GENERATE_SHLIB_SCRIPT=yes
++GENERATE_PIE_SCRIPT=yes
+diff -urN binutils-2.25.org/ld/emulparams/elf_x86_64_powernex.sh binutils-2.25/ld/emulparams/elf_x86_64_powernex.sh
+--- binutils-2.25.org/ld/emulparams/elf_x86_64_powernex.sh	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.25/ld/emulparams/elf_x86_64_powernex.sh	2015-05-07 15:25:06.794792550 +0200
+@@ -0,0 +1 @@
++. ${srcdir}/emulparams/elf_x86_64.sh
+diff -urN binutils-2.25.org/ld/Makefile.am binutils-2.25/ld/Makefile.am
+--- binutils-2.25.org/ld/Makefile.am	2015-05-07 14:56:32.657536431 +0200
++++ binutils-2.25/ld/Makefile.am	2015-05-07 15:31:13.617994154 +0200
+@@ -270,6 +270,7 @@
+ 	eelf32xstormy16.c \
+ 	eelf32xtensa.c \
+ 	eelf_i386.c \
++	eelf_i386_powernex.c \
+ 	eelf_i386_be.c \
+ 	eelf_i386_chaos.c \
+ 	eelf_i386_fbsd.c \
+@@ -477,6 +478,7 @@
+ 	eelf_k1om.c \
+ 	eelf_k1om_fbsd.c \
+ 	eelf_x86_64.c \
++	eelf_x86_64_powernex.c \
+ 	eelf_x86_64_fbsd.c \
+ 	eelf_x86_64_nacl.c \
+ 	eelf_x86_64_sol2.c \
+@@ -1255,6 +1257,10 @@
+ eelf_i386.c: $(srcdir)/emulparams/elf_i386.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_i386_powernex.c: $(srcdir)/emulparams/elf_i386_powernex.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_i386_powernex "$(tdir_elf_i386_powernex)"
++
+ eelf_i386_be.c: $(srcdir)/emulparams/elf_i386_be.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
+@@ -1911,6 +1917,10 @@
+ eelf_x86_64.c: $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_x86_64_powernex.c: $(srcdir)/emulparams/elf_x86_64_powernex.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_x86_64_powernex "$(tdir_elf_x86_64_powernex)"
++
+ eelf_x86_64_fbsd.c: $(srcdir)/emulparams/elf_x86_64_fbsd.sh \
+   $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+diff -urN binutils-2.25.org/ld/Makefile.in binutils-2.25/ld/Makefile.in
+--- binutils-2.25.org/ld/Makefile.in	2015-05-07 14:56:32.657536431 +0200
++++ binutils-2.25/ld/Makefile.in	2015-05-07 23:35:14.909849538 +0200
+@@ -578,6 +578,7 @@
+ 	eelf32xstormy16.c \
+ 	eelf32xtensa.c \
+ 	eelf_i386.c \
++	eelf_i386_powernex.c \
+ 	eelf_i386_be.c \
+ 	eelf_i386_chaos.c \
+ 	eelf_i386_fbsd.c \
+@@ -784,6 +785,7 @@
+ 	eelf_k1om.c \
+ 	eelf_k1om_fbsd.c \
+ 	eelf_x86_64.c \
++	eelf_x86_64_powernex.c \
+ 	eelf_x86_64_fbsd.c \
+ 	eelf_x86_64_nacl.c \
+ 	eelf_x86_64_sol2.c \
+@@ -1225,6 +1227,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_fbsd.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_ldso.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_nacl.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_powernex.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_sol2.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_i386_vxworks.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_k1om.Po@am__quote@
+@@ -1235,6 +1238,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_x86_64.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_x86_64_fbsd.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_x86_64_nacl.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_x86_64_powernex.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eelf_x86_64_sol2.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/egld960.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/egld960coff.Po@am__quote@
+@@ -2696,6 +2700,10 @@
+ eelf_i386.c: $(srcdir)/emulparams/elf_i386.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_i386_powernex.c: $(srcdir)/emulparams/elf_i386_powernex.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_i386_powernex "$(tdir_elf_i386_powernex)"
++
+ eelf_i386_be.c: $(srcdir)/emulparams/elf_i386_be.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
+@@ -3352,6 +3360,10 @@
+ eelf_x86_64.c: $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_x86_64_powernex.c: $(srcdir)/emulparams/elf_x86_64_powernex.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_x86_64_powernex "$(tdir_elf_x86_64_powernex)"
++
+ eelf_x86_64_fbsd.c: $(srcdir)/emulparams/elf_x86_64_fbsd.sh \
+   $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}

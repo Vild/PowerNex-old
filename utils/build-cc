@@ -1,0 +1,181 @@
+#!/bin/bash
+
+#Userconfig
+BUILD_DIR="$(pwd)/cc"
+DL_TOOL="aria2c"
+
+#Configs for program
+BUILD_VERSION=1
+BUILD_VERSION_FILE="$BUILD_DIR/build.version"
+
+
+BINUTILS_VER="2.25"
+GCC_VER="5.1.0"
+GMP_VER="6.0.0"
+MPFR_VER="3.1.2"
+ISL_VER="0.14"
+CLOOG_VER="0.18.3"
+MPC_VER="1.0.3"
+#TEXINFO_VER="5.2"
+
+
+BINUTILS_DL="ftp://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2"
+GCC_DL="ftp://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2"
+GMP_DL="https://gmplib.org/download/gmp/gmp-${GMP_VER}a.tar.xz"
+MPFR_DL="http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VER}.tar.xz"
+ISL_DL="http://isl.gforge.inria.fr/isl-${ISL_VER}.tar.xz"
+CLOOG_DL="http://www.bastoul.net/cloog/pages/download/count.php3?url=./cloog-${CLOOG_VER}.tar.gz"
+MPC_DL="ftp://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz"
+#TEXINFO_DL="https://ftp.gnu.org/gnu/texinfo/texinfo-${TEXINFO_VER}.tar.xz"
+
+BINUTILS_FILE="binutils-${BINUTILS_VER}.tar.bz2"
+GCC_FILE="gcc-${GCC_VER}.tar.bz2"
+GMP_FILE="gmp-${GMP_VER}a.tar.xz"
+MPFR_FILE="mpfr-${MPFR_VER}.tar.xz"
+ISL_FILE="isl-${ISL_VER}.tar.xz"
+CLOOG_FILE="cloog-${CLOOG_VER}.tar.gz"
+MPC_FILE="mpc-${MPC_VER}.tar.gz"
+#TEXINFO_FILE="texinfo-${TEXINFO_VER}.tar.xz"
+
+confirm () {
+    # call with a prompt string or use a default
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case $response in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
+#Version check
+
+if [ -e "$BUILD_VERSION_FILE" ]; then
+		if [ "$(cat $BUILD_VERSION_FILE)" -eq "$BUILD_VERSION" ]; then
+				echo "Found up-to-date cross compiler, skipping building one!"
+				exit 0
+		fi
+fi
+
+confirm "You sure you want to continue? [y/N]" || exit 0
+
+mkdir -p $BUILD_DIR $BUILD_DIR/src
+
+#Download phase
+pushd $BUILD_DIR/src
+
+DL=""
+for file in BINUTILS GCC GMP MPFR ISL CLOOG MPC #TEXINFO
+do
+		fileF="${file}_FILE"
+		fileD="${file}_DL"
+		if [ ! -e "${!fileF}" ]; then
+				DL="$DL ${!fileD}"
+				echo "${!fileF} does not exist, will download!"
+		else
+				echo "${!fileF} does exist, will not download!"
+		fi
+done
+
+if [ "$DL" ]; then
+		$DL_TOOL -Z --conditional-get --allow-overwrite --always-resume $DL
+fi
+
+echo "Removing all old source and build folders"
+rm -fr binutils-${BINUTILS_VER} gcc-${GCC_VER} gmp-${GMP_VER} mpfr-${MPFR_VER} isl-${ISL_VER} cloog-${CLOOG_VER} mpc-${MPC_VER} #texinfo-${TEXINFO_VER}
+rm -fr build-binutils build-gcc build-binutils-64 build-gcc-64
+
+pushd ..
+echo "Removing old built compiler"
+rm -fr bin i686-powernex include lib libexec share x86_64-powernex
+popd
+
+echo "Extracting binutils"
+pv -p -t -e -r binutils-${BINUTILS_VER}.tar.bz2 | tar xfj -
+echo "Extracting gcc-${GCC_VER}"
+pv -p -t -e -r gcc-${GCC_VER}.tar.bz2 | tar xfj -
+echo "Extracting gmp-${GMP_VER}"
+pv -p -t -e -r gmp-${GMP_VER}a.tar.xz | tar xfJ -
+echo "Extracting mpfr-${MPFR_VER}"
+pv -p -t -e -r mpfr-${MPFR_VER}.tar.xz | tar xfJ -
+echo "Extracting isl-${ISL_VER}"
+pv -p -t -e -r isl-${ISL_VER}.tar.xz | tar xfJ -
+echo "Extracting cloog-${CLOOG_VER}"
+pv -p -t -e -r cloog-${CLOOG_VER}.tar.gz | tar xfz -
+echo "Extracting mpc-${MPC_VER}"
+pv -p -t -e -r mpc-${MPC_VER}.tar.gz | tar xfz -
+#echo "Extracting texinfo-${TEXINFO_VER}"
+#pv -p -t -e -r texinfo-${TEXINFO_VER}.tar.xz | tar xfJ -
+
+#Moves files
+#cp -r isl-${ISL_VER} binutils-${BINUTILS_VER}/isl
+#cp -r cloog-${CLOOG_VER} binutils-${BINUTILS_VER}/cloog
+
+#cp -r gmp-${GMP_VER} gcc-${GCC_VER}/gmp
+#cp -r mpfr-${MPFR_VER} gcc-${GCC_VER}/mpfr
+#cp -r mpc-${MPC_VER} gcc-${GCC_VER}/mpc
+#cp -r isl-${ISL_VER} gcc-${GCC_VER}/isl
+#cp -r cloog-${CLOOG_VER} gcc-${GCC_VER}/cloog
+
+cp ../../utils/patch-cc/*.patch .
+
+#Patches
+patch -p0 -i binutils-${BINUTILS_VER}.patch
+patch -p0 -i gcc-${GCC_VER}.patch
+
+#Environment
+export PREFIX="$BUILD_DIR"
+export TARGET=i686-powernex
+export PATH="$PREFIX/bin:$PATH"
+CORES=$(echo "$(grep -c ^processor /proc/cpuinfo)+1" | bc)
+
+#Build binutils
+mkdir build-binutils
+pushd build-binutils
+../binutils-${BINUTILS_VER}/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
+make -j$CORES || exit 1
+make install -j$CORES || exit 1
+popd
+
+#Build gcc
+mkdir build-gcc
+pushd build-gcc
+../gcc-${GCC_VER}/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
+make all-gcc -j$CORES || exit 1
+make all-target-libgcc -j$CORES || exit 1
+make install-gcc -j$CORES || exit 1
+make install-target-libgcc -j$CORES || exit 1
+popd
+
+#Environment-64
+export TARGET=x86_64-powernex
+
+#Build binutils-64
+mkdir build-binutils-64
+pushd build-binutils-64
+../binutils-${BINUTILS_VER}/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
+make -j$CORES || exit 1
+make install -j$CORES || exit 1
+popd
+
+#Build gcc-64
+mkdir build-gcc-64
+pushd build-gcc-64
+../gcc-${GCC_VER}/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
+make all-gcc -j$CORES || exit 1
+make all-target-libgcc -j$CORES || exit 1
+make install-gcc -j$CORES || exit 1
+make install-target-libgcc -j$CORES || exit 1
+popd
+
+
+echo "Removing all source and build folders"
+rm -fr binutils-${BINUTILS_VER} gcc-${GCC_VER} gmp-${GMP_VER} mpfr-${MPFR_VER} isl-${ISL_VER} cloog-${CLOOG_VER} mpc-${MPC_VER} #texinfo-${TEXINFO_VER}
+rm -fr build-binutils build-gcc build-binutils-64 build-gcc-64
+
+popd
+
+#Save version
+echo $BUILD_VERSION > $BUILD_VERSION_FILE

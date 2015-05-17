@@ -1,0 +1,27 @@
+#!/bin/bash
+
+BUILD_DIR="$(pwd)/cc"
+DL_TOOL="aria2c"
+
+#Configs for program
+BUILD_VERSION=1
+BUILD_VERSION_FILE="$BUILD_DIR/build.version"
+
+CC_FILE="gcc-powernex.tar.xz"
+CC_URL="http://wild.tk/powernex/${CC_FILE}"
+
+#Version check
+if [ -e "$BUILD_VERSION_FILE" ]; then
+		if [ "$(cat $BUILD_VERSION_FILE)" -eq "$BUILD_VERSION" ]; then
+				echo "Found up-to-date cross compiler, skipping downloading it!"
+				exit 0
+		fi
+fi
+
+rm -rf cc
+
+$DL_TOOL -Z --conditional-get --allow-overwrite --always-resume $CC_URL
+
+pv -p -t -e -r $CC_FILE | tar xfJ -
+
+rm -rf $CC_FILE
