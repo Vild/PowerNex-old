@@ -4,10 +4,14 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq aria2 parallel pv
 install:
-	- ./utils/download-cc
+  - ./utils/download-cc
 
 script:
   - make
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+cache:
+  directories:
+    - cc
