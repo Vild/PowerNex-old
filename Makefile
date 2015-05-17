@@ -81,14 +81,14 @@ $(FONT_SRC): $(FONT_TOOL)
 
 $(MKINITRD_TOOL): $(MKINITRD_SRC)
 	@echo TOOL: Compiling $<
-	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $^
+	@gcc -O3 -Werror -W -Wall -std=c99 -Iincludes -o $@ $^
 
 $(INITRD): $(MKINITRD_TOOL) $(shell find $(INITRD_DIR)) FORCE
 	$(MKINITRD_TOOL) -o $@ -i $(INITRD_DIR)
 
 $(LOGOCONV_TOOL): $(LOGOCONV_SRC)
 	@echo TOOL: Compiling $<
-	@gcc -O3 -Werror -W -Wall -Iincludes -std=c11 -ggdb -o $@ $^
+	@gcc -O3 -Werror -W -Wall -std=c99 -o $@ $^
 
 $(LOGOCONV_OUT): $(LOGOCONV_TOOL) $(LOGOCONV_IN)
 	$(LOGOCONV_TOOL) $(LOGOCONV_IN) $(LOGOCONV_OUT) $(LOGOCONV_NS)
