@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DL_TOOL="aria2c"
+
+LOGO_FILE="logo.bmp"
+URL="http://wild.tk/powernex/"
+
+rm -rf ${LOGO_FILE}
+
+$DL_TOOL -Z --conditional-get --allow-overwrite --always-resume "${URL}${LOGO_FILE}"

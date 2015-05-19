@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 /* Windows 3.x bitmap file header */
 typedef struct {
     char         filetype[2];   /* magic - always 'B' 'M' */
@@ -11,7 +13,7 @@ typedef struct {
 
 /* Windows 3.x bitmap full header, including file header */
 typedef struct {
-    file_header  fileheader;
+   file_header  fileheader;
     unsigned int headersize;
     int          width;
     int          height;
@@ -39,12 +41,12 @@ int main(int argc, char ** argv) {
 		
 	FILE * in = fopen(argv[1], "rb");
 	if (!in) {
-		fprintf(stderr, "ERROR: Input file does not exist!\n");
+		fprintf(stderr, "ERROR: Input file '%s' does not exist!\nErrno: %d (%s)\n", argv[1], errno, strerror(errno));
 		return -1;
 	}
 	char * namespace = argv[3];
 	bitmap_header bitmap;
-  fread(&bitmap, sizeof(bitmap_header), 1, in);
+	int tmp __attribute__((unused)) = fread(&bitmap, sizeof(bitmap_header), 1, in);
 	if (bitmap.fileheader.filetype[0] != 'B' || bitmap.fileheader.filetype[1] != 'M') {
 		fprintf(stderr, "ERROR: Not a BMP file!\n");
 		fclose(in);
@@ -62,7 +64,7 @@ int main(int argc, char ** argv) {
 	
 	FILE * out = fopen(argv[2], "wb");
 	if (!out) {
-		fprintf(stderr, "ERROR: Output file can't be opened!\n");
+		fprintf(stderr, "ERROR: Output file '%s' can't be opened!\nErrno: %d (%s)\n", argv[2], errno, strerror(errno));
 		fclose(in);
 		return -1;
 	}
@@ -75,7 +77,7 @@ int main(int argc, char ** argv) {
 
 	int pad = (width % 4);
 	
-  data * data = calloc(sizeof(data), width*height);
+	data * data = calloc(sizeof(data), width*height);
 	for (int y = height-1; y >= 0; y--) {
 		for (int x = 0; x < width; x++) {
 			data[(y*width+x)].b = fgetc(in);
@@ -84,7 +86,7 @@ int main(int argc, char ** argv) {
 		}
 		if (pad)
 			for (int i = 0; i < 4-pad; i++)
-				fgetc(in);
+			     (void)getc(in);
 	}
 	
 	for (int i = 0; i < width*height; i++) {
@@ -92,7 +94,7 @@ int main(int argc, char ** argv) {
 				fputs("\n\t", out);
 		fprintf(out, "0x%X, 0x%X, 0x%X, ", data[i].r, data[i].g, data[i].b);
 	}
-  fprintf(out, "\n};\n\n#endif\n");
+	fprintf(out, "\n};\n\n#endif\n");
 	free(data);
 	
 	fclose(out);

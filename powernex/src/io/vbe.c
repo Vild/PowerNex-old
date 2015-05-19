@@ -6,7 +6,6 @@
 #include <powernex/io/textmode.h>
 #include <powernex/text/font.h>
 #include <powernex/text/logo.h>
-#include <powernex/text/cool.h>
 #include <powernex/io/textmode.h>
 #include <powernex/math.h>
 
@@ -57,12 +56,12 @@ void vbe_init(multiboot_info_t * multiboot) {
 	screenBufferSize = width * height * (modeInfo->bpp / 8);
 	screenBuffer = kmalloc(screenBufferSize);
 	vbe_putRect(0, 0, width, height, &(vbe_color_t){.a = 255, .r = 0x23, .g = 0x23, .b = 0x23});
-	for (uint32_t x = 0; x < cool_width*4; x++)
-		for (uint32_t y = 0; y < cool_height*4; y++)
+	for (uint32_t x = 0; x < logo_width*4; x++)
+		for (uint32_t y = 0; y < logo_height*4; y++)
 			vbe_putPixel(x+0, y+0, &(vbe_color_t){.a = 255,
-						.r = cool_data[(x/4+(y/4*cool_width))*3+0],
-						.g = cool_data[(x/4+(y/4*cool_width))*3+1],
-						.b = cool_data[(x/4+(y/4*cool_width))*3+2]});
+						.r = logo_data[(x/4+(y/4*logo_width))*3+0],
+						.g = logo_data[(x/4+(y/4*logo_width))*3+1],
+						.b = logo_data[(x/4+(y/4*logo_width))*3+2]});
 	memcpy((void *)modeInfo->physbase, screenBuffer, screenBufferSize);
 
 	textmode_resize(width/font.Width, height/font.Height);

@@ -1,6 +1,5 @@
 MODULES := powernex
 
-#PREFIX	:= cc/Linux/bin/x86_64-pc-elf-
 PREFIX	:= cc/bin/i686-powernex-
 AR	:= $(PREFIX)ar
 AS	:= $(PREFIX)as
@@ -27,13 +26,15 @@ INITRD_DIR    := initrd
 
 LOGOCONV_TOOL	:= utils/logoconv
 LOGOCONV_SRC	:= $(LOGOCONV_TOOL).c
-LOGOCONV_IN		:= Logo.bmp
+LOGOCONV_IN		:= logo.bmp
 LOGOCONV_OUT  := powernex/include/text/logo.h
 LOGOCONV_NS		:= logo
 
+ASSETS        := $(LOGOCONV_IN)
+
 POWERNEX      := iso/boot/powernex.krl
 
-.PHONY: clean mrproper $(MODULES) bochs
+.PHONY: clean kclean $(MODULES) bochs
 
 # Add whatever should be your default / global target.
 all: powernex.iso
@@ -48,7 +49,7 @@ iso: powernex.iso
 powernex.iso: $(POWERNEX) $(INITRD)
 	grub-mkrescue -d /usr/lib/grub/i386-pc -o powernex.iso iso
 
-$(POWERNEX): $(LOGOCONV_OUT) powernex/include/text/cool.h bin/powernex.krl
+$(POWERNEX): $(CC) $(LOGOCONV_OUT) bin/powernex.krl
 	cp bin/powernex.krl $@
 
 bochs: bochsrc.txt powernex.iso
@@ -65,6 +66,9 @@ make-logo: $(LOGOCONV_OUT)
 
 .PHONY: FORCE
 FORCE:
+
+$(CC):
+	utils/download-cc
 
 buildinfo.c: FORCE
 	./buildinfo.sh
@@ -93,9 +97,8 @@ $(LOGOCONV_TOOL): $(LOGOCONV_SRC)
 $(LOGOCONV_OUT): $(LOGOCONV_TOOL) $(LOGOCONV_IN)
 	$(LOGOCONV_TOOL) $(LOGOCONV_IN) $(LOGOCONV_OUT) $(LOGOCONV_NS)
 
-powernex/include/text/cool.h: $(LOGOCONV_TOOL) cool.bmp
-	$(LOGOCONV_TOOL) cool.bmp $@ cool
-
+$(ASSETS):
+	utils/download-assets
 
 # Including a module's build.mk
 define MK_template
@@ -159,12 +162,9 @@ $(foreach module,$(MODULES),$(eval $(call INCLUDE_template,$(module))))
 
 clean:
 	$(RM) -rf $(foreach mod,$(MODULES),$(mod)/obj/) | true
-	$(RM) -rf includes/* bin/* lib/* $(FONT_SRC) $(FONT_H) | true
+	$(RM) -rf includes/* bin/* lib/* $(FONT_SRC) $(FONT_H) $(ASSETS) $(FONT_TOOL) $(MKINITRD_TOOL) $(LOGOCONV_TOOL) | true
 
-kclean:
+kclean: 
 	$(RM) -rf powernex/obj/ | true
-
-cclean: clean
-	$(RM) -rf $(FONT_TOOL) $(MKINITRD_TOOL) | true
 
 #$(foreach mod,$(MODULES),$(mod)/obj/*.d)

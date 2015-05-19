@@ -5,6 +5,7 @@ before_install:
   - sudo apt-get install -qq aria2 parallel pv
 install:
   - ./utils/download-cc
+  - ./utils/download-assets
 
 script:
   - make

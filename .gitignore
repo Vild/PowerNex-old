@@ -24,3 +24,5 @@ powernex/include/text/logo.h
 powernex/include/text/cool.h
 Logo.bmp
 cool.bmp
+bx_enh_dbg.ini
+*.bmp
