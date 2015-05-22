@@ -41,7 +41,6 @@ all: powernex.iso
 
 run: bochs
 
-
 powernex: $(LOGOCONV_OUT) bin/powernex.krl
 
 iso: powernex.iso
