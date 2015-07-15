@@ -1,4 +1,5 @@
 #include <powernex/cli.h>
+#include <powernex/io/port.h>
 #include <powernex/io/textmode.h>
 #include <powernex/io/keyboard.h>
 #include <powernex/mem/heap.h>
@@ -54,7 +55,10 @@ static int cli_run(char * line) {
 		kprintf("%s\n", line + 5);
 	else if (!strncmp(line, "echo", 4))
 		kprintf("\n");
-	else if (!strncmp(line, "patt ", 5)) {
+	else if (!strncmp(line, "shutdown", 8)) {
+		outw(0xB004, 0x0 | 0x2000); // Qemu / Boch
+		kprintf("Shutdown failed!\n");
+	} else if (!strncmp(line, "patt ", 5)) {
 		vbe_text_mode = false;
 		vbe_pattern = line[5] - '1';
 	} else if (!strncmp(line, "1", 4))
