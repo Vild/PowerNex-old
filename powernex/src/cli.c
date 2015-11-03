@@ -19,8 +19,24 @@ void cli_start() {
 	while(true) {
 		welcome();
 		kputc('\n');
+
 		login();
 		kputc('\n');
+
+		void* test = kmalloc(64);
+		kprintf("64 Alloc at 0x%x\n",test);
+		void* test2 = kmalloc(64);
+		kprintf("64 Alloc 2 at 0x%x\n",test2);
+		kfree(test);
+		void* test6 = kmalloc(64);
+		kprintf("64 Alloc 6 at 0x%x\n",test6);
+
+		kfree(test2);
+		/*void* test7 = kmalloc(64);
+		kprintf("64 Alloc 6 at 0x%x\n",test7);*/
+
+		/*kprintf("Start 0x%x, end: 0x%x, size %d\n",Kstart, end,size/1024);*/
+
 		logout = false;
 		while (!logout) {
 			kprintf("%s@%s# ", user, HOSTNAME);
@@ -44,7 +60,7 @@ extern int vbe_pattern;
 static int cli_run(char * line) {
 
 	kprintf("Line is: '%s'\n", line);
-	
+
 	if (!strncmp(line, "logout", 6) || !strncmp(line, "exit", 4))
 		logout = true;
 	else if (!strncmp(line, "clear", 5))
@@ -84,19 +100,19 @@ static void welcome() {
 	kputc(' ');kputc(' ');kputc('|');kputc(' ');kputc(' ');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line1);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	
+
 	kputc('|');kputc('-');kputc('|');kputc('-');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line2);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	
+
 	kputc('|');kputc(' ');kputc('|');kputc(' ');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s%s", line3, line3_);kputc('\n');
 	kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	
+
 	kputc('|');kputc(' ');kputc(' ');kputc(' ');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line4);kputc('\n');
   kputcolor(makecolor(COLOR_GREEN, COLOR_BLACK));
-	
+
 	kputc('|');kputc('-');kputc('-');kputc('-');kputc('|');
 	kputcolor(DEFAULT_COLOR);kprintf(" %s", line5);kputc('\n');
 }
@@ -117,7 +133,7 @@ static void login() {
 			break;
 		else
 			kfree(user);
-		
+
 		kputcolor(makecolor(COLOR_RED, COLOR_BLACK));
 		kprintf("Sorry, try again.\n\n");
 		kputcolor(DEFAULT_COLOR);

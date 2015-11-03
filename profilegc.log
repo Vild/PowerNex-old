@@ -1,0 +1,54 @@
+bytes allocated, type, function, file:line
+   50944	std.array.Appender!string.Appender.Data std.array.Appender!string.Appender.this /usr/include/dlang/dmd/std/array.d:2689
+   14592	relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry relationlist.relationlist.RelationList!(VariantN!(72LU, Processor, Target, FileNode)).RelationList.Add ../../.dub/packages/relationlist-2.1.1/source/relationlist/relationlist.d:44
+    4528	immutable(char)[] wild.frontend.frontend.Frontend.ResolveString source/wild/frontend/frontend.d:31
+    2688	backtrace.backtrace.BTTraceHandler backtrace.backtrace.btTraceHandler ../../.dub/packages/backtrace-d-0.1.0/source/backtrace/backtrace.d:241
+    1728	std.array.Appender!(string[]).Appender.Data std.array.Appender!(string[]).Appender.this /usr/include/dlang/dmd/std/array.d:2689
+    1726	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddTarget source/wild/parser/dependencytree.d:115
+    1489	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddFile source/wild/parser/dependencytree.d:106
+    1451	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddFile source/wild/parser/dependencytree.d:110
+    1333	immutable(char)[] wild.build.buildmanager.BuildManager.build.traverse source/wild/build/buildmanager.d:69
+    1120	relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry[] relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry.AddChild ../../.dub/packages/relationlist-2.1.1/source/relationlist/relationentry.d:41
+    1120	relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry[] relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry.GetParents ../../.dub/packages/relationlist-2.1.1/source/relationlist/relationentry.d:53
+     988	std.file.FileException std.file.cenforce!bool.cenforce /usr/include/dlang/dmd/std/file.d:160
+     922	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddProcessor source/wild/parser/dependencytree.d:124
+     914	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddTarget source/wild/parser/dependencytree.d:119
+     912	relationlist.relationentry.RelationEntry!(VariantN!(72LU, Processor, Target, FileNode)).RelationEntry[] relationlist.relationlist.RelationList!(VariantN!(72LU, Processor, Target, FileNode)).RelationList.Add ../../.dub/packages/relationlist-2.1.1/source/relationlist/relationlist.d:53
+     583	const(immutable(char)[]) wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:124
+     570	immutable(char)[] wild.frontend.frontend.Frontend.ResolveString source/wild/frontend/frontend.d:20
+     512	wild.frontend.jsonfrontend.Rule[] wild.frontend.jsonfrontend.JsonFrontend.load.__foreachbody6 source/wild/frontend/jsonfrontend.d:91
+     512	std.array.Appender!(ubyte[]).Appender.Data std.array.Appender!(ubyte[]).Appender.this /usr/include/dlang/dmd/std/array.d:2689
+     400	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:139
+     400	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:126
+     400	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:188
+     147	immutable(char)[] wild.parser.dependencytree.DependencyTree.AddProcessor source/wild/parser/dependencytree.d:128
+     144	std.json.JSONValue[] std.json.parseJSON!string.parseJSON.parseValue /usr/include/dlang/dmd/std/json.d:841
+     144	closure std.json.parseJSON!string.parseJSON /usr/include/dlang/dmd/std/json.d:639
+     104	wild.frontend.jsonfrontend.JsonFrontend app.buildState source/app.d:82
+     102	immutable(char)[] wild.parser.dependencytree.DependencyTree.GetTarget source/wild/parser/dependencytree.d:87
+      96	std.array.Appender!(DirHandle[]).Appender.Data std.array.Appender!(DirHandle[]).Appender.this /usr/include/dlang/dmd/std/array.d:2689
+      80	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.load source/wild/frontend/jsonfrontend.d:97
+      80	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:145
+      80	immutable(char)[][] wild.frontend.frontend.Frontend.ToBuild source/wild/frontend/frontend.d:78
+      64	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.load.__foreachbody4 source/wild/frontend/jsonfrontend.d:62
+      64	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.load.__foreachbody5 source/wild/frontend/jsonfrontend.d:77
+      64	wild.build.buildmanager.BuildManager app.buildState source/app.d:84
+      56	utils.getopt.Option[] utils.getopt.getoptImpl!().getoptImpl source/utils/getopt.d:641
+      56	utils.getopt.Option[] utils.getopt.getoptImpl!(string, string, uint*, string, string, bool*, string, string, bool*, string, string, bool*).getoptImpl source/utils/getopt.d:582
+      56	utils.getopt.Option[] utils.getopt.getoptImpl!(string, string, bool*, string, string, bool*).getoptImpl source/utils/getopt.d:582
+      56	utils.getopt.Option[] utils.getopt.getoptImpl!(string, string, bool*).getoptImpl source/utils/getopt.d:582
+      56	utils.getopt.Option[] utils.getopt.getoptImpl!(string, string, bool*, string, string, bool*, string, string, bool*).getoptImpl source/utils/getopt.d:582
+      48	const(immutable(char)[]) wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:170
+      40	relationlist.relationlist.RelationList!(VariantN!(72LU, Processor, Target, FileNode)).RelationList wild.parser.dependencytree.DependencyTree.this source/wild/parser/dependencytree.d:29
+      40	wild.cache.cache.Cache app.buildState source/app.d:81
+      40	wild.parser.dependencytree.DependencyTree app.buildState source/app.d:83
+      32	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:172
+      24	immutable(char)[] utils.getopt.splitAndGet source/utils/getopt.d:539
+      16	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:192
+      16	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.load source/wild/frontend/jsonfrontend.d:37
+      16	immutable(char)[][] wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:141
+       9	immutable(char)[] utils.getopt.splitAndGet source/utils/getopt.d:544
+       6	const(immutable(char)[]) wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:121
+       6	immutable(char)[] utils.getopt.splitAndGet source/utils/getopt.d:537
+       3	const(immutable(char)[]) wild.frontend.jsonfrontend.JsonFrontend.process source/wild/frontend/jsonfrontend.d:136
+       2	immutable(char)[] wild.frontend.frontend.Frontend.ResolveString source/wild/frontend/frontend.d:18

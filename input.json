@@ -1,0 +1,143 @@
+{
+  "variables": {
+    "prefix": "cc/bin/i686-powernex",
+
+    "logo": "logo.bmp",
+
+    "tccflags": "-O3 -Wall -Werror -Iincludes",
+
+    "karflags": "rcs",
+    "kasflags": "-march=generic32 --32 --nocompress-debug-sections -D -g --gdwarf-2 -Iincludes -Inewlib/newlib/libc/include -Wall",
+    "kccflags": "-std=c11 -O0 -g -m32 -nostdlib -fno-bounds-check -mno-red-zone -mno-mmx -mno-3dnow -Iincludes -Inewlib/newlib/libc/include -Wall -Werror -pedantic -fsigned-bitfields -funsigned-bitfields -Wno-overlength-strings -m32 -Iinclude -ffreestanding -fno-builtin -O0 -Wall -Wextra",
+    "kldflags": "-T powernex/link.ld -nostdlib -nostdinc"
+  },
+  "sources": ["powernex/src/"],
+  "processors": {
+    "script": {
+      "command": "bash",
+      "arguments": "$in $out"
+    },
+    "tcc": {
+      "command": "gcc",
+      "arguments": "${tccflags} $in -o $out"
+    },
+    "fontconv": {
+      "command": "bin/fontconv",
+      "arguments": "-C powernex/include/text/font.h -b < $in > $out"
+    },
+    "imgconv": {
+      "command": "bin/imgconv",
+      "arguments": "$in $out logo"
+    },
+    "mkinitrd": {
+      "command": "bin/mkinitrd",
+      "arguments": "-o $out -i $in"
+    },
+    "iso": {
+      "command": "grub-mkrescue",
+      "arguments": "-d /usr/lib/grub/i386-pc -o $out $in"
+    },
+    "cp": {
+      "command": "cp",
+      "arguments": "-r $in $out"
+    },
+
+    "kas": {
+      "command": "${prefix}-as",
+      "arguments": "${kasflags} -c $in -o $out"
+    },
+    "kcc": {
+      "command": "${prefix}-gcc",
+      "arguments": " ${kccflags} -c $in -o $out"
+    },
+    "kld": {
+      "command": "${prefix}-ld",
+      "arguments": " ${kldflags} $in -o $out"
+    }
+  },
+  "phonies": {
+    "powernex/src/buildinfo.c": {
+      "processor": "script",
+      "input": "buildinfo.sh"
+    },
+    "disk/boot/initrd.img": {
+      "processor": "mkinitrd",
+      "input": "initrd"
+    },
+
+    "disk/boot/": {
+      "processor": "cp",
+      "input": "boot/*"
+    },
+
+    "powernex.iso": {
+      "processor": "iso",
+      "input": "disk"
+    }
+  },
+  "missing": {
+    "${prefix}-as": {
+      "processor": "script",
+      "input": "utils/download-cc"
+    },
+    "${prefix}-gcc": {
+      "processor": "script",
+      "input": "utils/download-cc"
+    },
+    "${prefix}-ld": {
+      "processor": "script",
+      "input": "utils/download-cc"
+    },
+
+    "logo.bmp": {
+      "processor": "script",
+      "input": "utils/download-assets"
+    }
+  },
+  "rules": {
+    "bin/fontconv": {
+      "processor": "tcc",
+      "input": "buildtools/bdf2c.c"
+    },
+    "bin/imgconv": {
+      "processor": "tcc",
+      "input": "buildtools/bmp2c.c"
+    },
+    "bin/mkinitrd": {
+      "processor": "tcc",
+      "input": "utils/mkinitrd.c"
+    },
+
+
+    "powernex/src/text/font.c": {
+      "processor": "fontconv",
+      "input": "utils/u_vga16.bdf",
+      "extra": "sed -i 's/\\#include \\\"font\\.h\\\"/\\#include \\<powernex\\/text\\/font\\.h\\>/g' $out"
+    },
+
+    "powernex/include/text/logo.h": {
+      "processor": "imgconv",
+      "input": "logo.bmp"
+    },
+
+    "powernex/obj/*_S.o": {
+      "processor": "kas",
+      "input": "powernex/src/*.S"
+    },
+    "powernex/obj/*.o": {
+      "processor": "kcc",
+      "input": "powernex/src/*.c"
+    },
+    "disk/boot/powernex.krl": {
+      "processor": "kld",
+      "input": "powernex/obj/*.o"
+    }
+  },
+  "targets": [
+    "powernex/include/text/logo.h",
+    "disk/boot/powernex.krl",
+    "disk/boot/initrd.img",
+    "disk/boot/",
+    "powernex.iso"
+  ]
+}

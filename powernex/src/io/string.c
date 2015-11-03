@@ -1,4 +1,4 @@
-#include <string.h>
+#include <powernex/string.h>
 
 
 // Copy len bytes from src to dest.
@@ -75,4 +75,3 @@ int strlen(const char * src) {
     i++;
   return i;
 }
-

@@ -23,7 +23,7 @@ static void setup(multiboot_info_t * multiboot);
 int kmain(UNUSED int multiboot_magic, multiboot_info_t * multiboot) {
 	setup(multiboot);
 	kputc('\n');
-	
+
 	cli_start();
 	return 0xDEADBEEF;
 }
@@ -45,7 +45,7 @@ static void step(const char * str, ...) {
 static void setup(multiboot_info_t * multiboot) {
   //Textmode
 	textmode_clear(); // Also initalizes textmode
-	
+
 	//GDT
 	step("Initializing GDT...");
 	gdt_init();
@@ -62,7 +62,7 @@ static void setup(multiboot_info_t * multiboot) {
 	t |= 3 << 9;
 	__asm__ volatile ("mov %0, %%cr4" :: "r"(t));
 
-	//Memory	
+	//Memory
 	step("Initializing paging with %d MB...", (multiboot->mem_lower + multiboot->mem_upper)/1024);
 	paging_init(multiboot);
 
@@ -93,7 +93,7 @@ static void setup(multiboot_info_t * multiboot) {
 	step("Initializing Initrd...");
 	if (multiboot->mods_count == 0)
 		panic("No initrd defined in grub.cfg!");
-	
+
 	uint32_t initrd_location = *((uint32_t *)multiboot->mods_addr);
   // uint32_t initrd_end = *(uint32_t *)(multiboot->mods_addr+4);
 	fs_root = initrd_init(initrd_location);
